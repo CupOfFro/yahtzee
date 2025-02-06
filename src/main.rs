@@ -9,11 +9,14 @@ use std::io::Write; // Bring fush into scope
 use std::thread::sleep;
 use std::time::Duration;
 
-// usefule references
+// usefule references for ANSI escape codes
 // https://stackoverflow.com/questions/33139248/i-cannot-print-color-escape-codes-to-the-terminal
 // https://stackoverflow.com/questions/69597466/move-cursor-escape-sequence
 // https://duffney.io/usingansiescapesequencespowershell/
 // https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
+
+// Info about format args for rust
+// https://doc.rust-lang.org/std/fmt/index.html
 
 fn main() {
     println!("{}", ANSI_CLEAR_SCREEN); // clear screen
@@ -25,6 +28,7 @@ fn main() {
     // println!("\x1b[4AEka Eka Boo mean that{}", ANSI_RESET_TEXT);
 
     fake_percentage();
+    println!("");
     fake_loading_bar();
 
     pause();
@@ -42,13 +46,13 @@ fn fake_percentage() {
         // This is good to know cause now I think I can draw a whole screen and update
         // it with flush
         io::stdout().flush().expect("Welp this is bad");
-        // sleep(Duration::from_millis(100));
+        sleep(Duration::from_millis(10));
     }
 }
 
 fn fake_loading_bar() {
     for i in 1..=20 {
-        print!("\x1b[100D[{:#<1$}{:]>20}", "", i);
+        print!("\x1b[100D[{:#<1$}{2:>3$}", "", i, "]", 21 - i);
         io::stdout().flush().expect("Welp this is bad");
         sleep(Duration::from_millis(100));
     }
