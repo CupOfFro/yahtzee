@@ -31,6 +31,8 @@ fn main() {
     println!("");
     fake_loading_bar();
 
+    draw_five_face(&mut Point { x: 10, y: 20 });
+
     pause();
 }
 
@@ -46,7 +48,7 @@ fn fake_percentage() {
         // This is good to know cause now I think I can draw a whole screen and update
         // it with flush
         io::stdout().flush().expect("Welp this is bad");
-        sleep(Duration::from_millis(10));
+        sleep(Duration::from_millis(100));
     }
 }
 
@@ -54,7 +56,7 @@ fn fake_loading_bar() {
     for i in 1..=20 {
         // So this is a bit complicated at first but relatively simple
         // We start with "\x1b[100D[", this moves the cursor back either
-        // 100 spaces, or to the left side of the screen, and will then 
+        // 100 spaces, or to the left side of the screen, and will then
         // redraw from there.
         // So {} in print! will print an arg after the closing ".
         // : inside {} '{:}' gives us various format options
@@ -71,10 +73,33 @@ fn fake_loading_bar() {
 }
 
 fn pause() {
+    print!("{}", ANSI_RESET_TEXT); // Reset any weird things we did
+    println!("\nPausing. Press Enter to Continue");
     let mut pause = String::new();
     io::stdin()
         .read_line(&mut pause)
         .expect("Failed to read line");
+}
+
+struct Point {
+    x: usize,
+    y: usize,
+}
+
+fn draw_five_face(p: &mut Point) {
+    let five_face: [&str; 5] = [
+        "+-------+",
+        "| #   # |",
+        "|   #   |",
+        "| #   # |",
+        "+-------+",
+    ];
+    for line in five_face {
+        let pos = format!("\x1b[{};{}H", &p.x, &p.y);
+        p.x += 1;
+        print!("{}{line}", pos);
+        io::stdout().flush().expect("Welp this is bad");
+    }
 }
 
 // Moving Cursor
