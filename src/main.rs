@@ -52,6 +52,18 @@ fn fake_percentage() {
 
 fn fake_loading_bar() {
     for i in 1..=20 {
+        // So this is a bit complicated at first but relatively simple
+        // We start with "\x1b[100D[", this moves the cursor back either
+        // 100 spaces, or to the left side of the screen, and will then 
+        // redraw from there.
+        // So {} in print! will print an arg after the closing ".
+        // : inside {} '{:}' gives us various format options
+        // :# tells it to fill whitespace with a '#' char.
+        // < says to left justify any fill space.
+        // 1$ is saying that argument 1 (arguments are 0 based) is how much space to fill with.
+        // so this matters because {} automatically assumes we are fillign with arg 0,
+        // which in this case is "" an empty string.
+        // Next we print argument 2 a "]" right justified
         print!("\x1b[100D[{:#<1$}{2:>3$}", "", i, "]", 21 - i);
         io::stdout().flush().expect("Welp this is bad");
         sleep(Duration::from_millis(100));
