@@ -28,16 +28,24 @@ fn main() {
     // println!("\x1b[31mHello, world!\x1b[39m\n"); // Red text
     // println!("\x1b[4AEka Eka Boo mean that{}", ANSI_RESET_TEXT);
 
-    // fake_percentage();
-    // println!("");
-    // fake_loading_bar();
+    fake_percentage();
+    println!("");
+    fake_loading_bar();
 
+    set_bg_color(ANSI_BLUE_BG);
     draw_one_face(&mut Point { r: 10, c: 10 });
+    set_bg_color(ANSI_GREEN_BG);
     draw_two_face(&mut Point { r: 10, c: 21 });
+    set_bg_color(ANSI_BLACK_BG);
     draw_three_face(&mut Point { r: 10, c: 32 });
+    set_bg_color(ANSI_RED_BG);
     draw_four_face(&mut Point { r: 10, c: 43 });
+    set_bg_color(ANSI_CYAN_BG);
     draw_five_face(&mut Point { r: 10, c: 54 });
+    set_bg_color(ANSI_WHITE_BG);
     draw_six_face(&mut Point { r: 10, c: 65 });
+    set_bg_color(ANSI_RESET_TEXT);
+
     draw_horizontal_line(&mut Point { r: 1, c: 1 }, "%", 100);
     draw_vertical_line(&mut Point { r: 1, c: 1 }, "%", 50);
     draw_horizontal_line(&mut Point { r: 2, c: 2 }, "#", 100);
@@ -67,6 +75,10 @@ fn draw_to_screen() {
     io::stdout().flush().expect("Welp this is bad");
 }
 
+fn set_bg_color(color: &str){
+    print!("{}", color);
+}
+
 fn draw_horizontal_line(p: &mut Point, char: &str, length: usize) {
     // I could use format to do this but think it looks better to use ANSI escapes like most of program
     for i in 0..length {
@@ -87,11 +99,11 @@ fn draw_vertical_line(p: &mut Point, char: &str, length: usize) {
 
 fn draw_one_face(p: &mut Point) {
     let five_face: [&str; 5] = [
-        " +-------+",
+        " +-------+ ",
         "|         |",
         "|    #    |",
         "|         |",
-        " +-------+",
+        " +-------+ ",
     ];
     for line in five_face {
         let pos = format!("\x1b[{};{}H", &p.r, &p.c);
@@ -102,11 +114,11 @@ fn draw_one_face(p: &mut Point) {
 
 fn draw_two_face(p: &mut Point) {
     let five_face: [&str; 5] = [
-        " +-------+",
+        " +-------+ ",
         "|       # |",
         "|         |",
         "| #       |",
-        " +-------+",
+        " +-------+ ",
     ];
     for line in five_face {
         let pos = format!("\x1b[{};{}H", &p.r, &p.c);
@@ -117,11 +129,11 @@ fn draw_two_face(p: &mut Point) {
 
 fn draw_three_face(p: &mut Point) {
     let five_face: [&str; 5] = [
-        " +-------+",
+        " +-------+ ",
         "|       # |",
         "|    #    |",
         "| #       |",
-        " +-------+",
+        " +-------+ ",
     ];
     for line in five_face {
         let pos = format!("\x1b[{};{}H", &p.r, &p.c);
@@ -132,11 +144,11 @@ fn draw_three_face(p: &mut Point) {
 
 fn draw_four_face(p: &mut Point) {
     let five_face: [&str; 5] = [
-        " +-------+",
+        " +-------+ ",
         "| #     # |",
         "|         |",
         "| #     # |",
-        " +-------+",
+        " +-------+ ",
     ];
     for line in five_face {
         let pos = format!("\x1b[{};{}H", &p.r, &p.c);
@@ -147,11 +159,11 @@ fn draw_four_face(p: &mut Point) {
 
 fn draw_five_face(p: &mut Point) {
     let five_face: [&str; 5] = [
-        " +-------+",
+        " +-------+ ",
         "| #     # |",
         "|    #    |",
         "| #     # |",
-        " +-------+",
+        " +-------+ ",
     ];
     for line in five_face {
         let pos = format!("\x1b[{};{}H", &p.r, &p.c);
@@ -162,11 +174,11 @@ fn draw_five_face(p: &mut Point) {
 
 fn draw_six_face(p: &mut Point) {
     let five_face: [&str; 5] = [
-        " +-------+",
+        " +-------+ ",
         "| #     # |",
         "| #     # |",
         "| #     # |",
-        " +-------+",
+        " +-------+ ",
     ];
     for line in five_face {
         let pos = format!("\x1b[{};{}H", &p.r, &p.c);
