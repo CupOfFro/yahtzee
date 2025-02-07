@@ -14,6 +14,7 @@ use std::time::Duration;
 // https://stackoverflow.com/questions/69597466/move-cursor-escape-sequence
 // https://duffney.io/usingansiescapesequencespowershell/
 // https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
+// https://en.wikipedia.org/wiki/ANSI_escape_code
 
 // Info about format args for rust
 // https://doc.rust-lang.org/std/fmt/index.html
@@ -27,15 +28,154 @@ fn main() {
     // println!("\x1b[31mHello, world!\x1b[39m\n"); // Red text
     // println!("\x1b[4AEka Eka Boo mean that{}", ANSI_RESET_TEXT);
 
-    fake_percentage();
-    println!("");
-    fake_loading_bar();
+    // fake_percentage();
+    // println!("");
+    // fake_loading_bar();
 
-    draw_five_face(&mut Point { x: 10, y: 20 });
+    draw_one_face(&mut Point { r: 10, c: 10 });
+    draw_two_face(&mut Point { r: 10, c: 21 });
+    draw_three_face(&mut Point { r: 10, c: 32 });
+    draw_four_face(&mut Point { r: 10, c: 43 });
+    draw_five_face(&mut Point { r: 10, c: 54 });
+    draw_six_face(&mut Point { r: 10, c: 65 });
+    draw_horizontal_line(&mut Point { r: 1, c: 1 }, "%", 100);
+    draw_vertical_line(&mut Point { r: 1, c: 1 }, "%", 50);
+    draw_horizontal_line(&mut Point { r: 2, c: 2 }, "#", 100);
+    draw_to_screen();
 
     pause();
 }
 
+
+
+fn pause() {
+    print!("{}", ANSI_RESET_TEXT); // Reset any weird things we did
+    println!("\nPausing. Press Enter to Continue");
+    let mut pause = String::new();
+    io::stdin()
+        .read_line(&mut pause)
+        .expect("Failed to read line");
+}
+
+struct Point {
+    r: usize, // row
+    c: usize, // column
+}
+
+// This will draw any print statements we have done with no new lines
+fn draw_to_screen() {
+    io::stdout().flush().expect("Welp this is bad");
+}
+
+fn draw_horizontal_line(p: &mut Point, char: &str, length: usize) {
+    // I could use format to do this but think it looks better to use ANSI escapes like most of program
+    for i in 0..length {
+        let position = format!("\x1b[{};{}H", &p.r, &p.c);
+        p.c += 1;
+        print!("{}{}", position, char);
+    }
+}
+
+fn draw_vertical_line(p: &mut Point, char: &str, length: usize) {
+    // I could use format to do this but think it looks better to use ANSI escapes like most of program
+    for i in 0..length {
+        let position = format!("\x1b[{};{}H", &p.r, &p.c);
+        p.r += 1;
+        print!("{}{}", position, char);
+    }
+}
+
+fn draw_one_face(p: &mut Point) {
+    let five_face: [&str; 5] = [
+        " +-------+",
+        "|         |",
+        "|    #    |",
+        "|         |",
+        " +-------+",
+    ];
+    for line in five_face {
+        let pos = format!("\x1b[{};{}H", &p.r, &p.c);
+        p.r += 1;
+        print!("{}{line}", pos);
+    }
+}
+
+fn draw_two_face(p: &mut Point) {
+    let five_face: [&str; 5] = [
+        " +-------+",
+        "|       # |",
+        "|         |",
+        "| #       |",
+        " +-------+",
+    ];
+    for line in five_face {
+        let pos = format!("\x1b[{};{}H", &p.r, &p.c);
+        p.r += 1;
+        print!("{}{line}", pos);
+    }
+}
+
+fn draw_three_face(p: &mut Point) {
+    let five_face: [&str; 5] = [
+        " +-------+",
+        "|       # |",
+        "|    #    |",
+        "| #       |",
+        " +-------+",
+    ];
+    for line in five_face {
+        let pos = format!("\x1b[{};{}H", &p.r, &p.c);
+        p.r += 1;
+        print!("{}{line}", pos);
+    }
+}
+
+fn draw_four_face(p: &mut Point) {
+    let five_face: [&str; 5] = [
+        " +-------+",
+        "| #     # |",
+        "|         |",
+        "| #     # |",
+        " +-------+",
+    ];
+    for line in five_face {
+        let pos = format!("\x1b[{};{}H", &p.r, &p.c);
+        p.r += 1;
+        print!("{}{line}", pos);
+    }
+}
+
+fn draw_five_face(p: &mut Point) {
+    let five_face: [&str; 5] = [
+        " +-------+",
+        "| #     # |",
+        "|    #    |",
+        "| #     # |",
+        " +-------+",
+    ];
+    for line in five_face {
+        let pos = format!("\x1b[{};{}H", &p.r, &p.c);
+        p.r += 1;
+        print!("{}{line}", pos);
+    }
+}
+
+fn draw_six_face(p: &mut Point) {
+    let five_face: [&str; 5] = [
+        " +-------+",
+        "| #     # |",
+        "| #     # |",
+        "| #     # |",
+        " +-------+",
+    ];
+    for line in five_face {
+        let pos = format!("\x1b[{};{}H", &p.r, &p.c);
+        p.r += 1;
+        print!("{}{line}", pos);
+    }
+}
+
+// Moving Cursor
 // Up: \x1b[{n}A
 // Down: \x1b[{n}B
 // Right: \x1b[{n}C
@@ -71,38 +211,6 @@ fn fake_loading_bar() {
         sleep(Duration::from_millis(100));
     }
 }
-
-fn pause() {
-    print!("{}", ANSI_RESET_TEXT); // Reset any weird things we did
-    println!("\nPausing. Press Enter to Continue");
-    let mut pause = String::new();
-    io::stdin()
-        .read_line(&mut pause)
-        .expect("Failed to read line");
-}
-
-struct Point {
-    x: usize,
-    y: usize,
-}
-
-fn draw_five_face(p: &mut Point) {
-    let five_face: [&str; 5] = [
-        "+-------+",
-        "| #   # |",
-        "|   #   |",
-        "| #   # |",
-        "+-------+",
-    ];
-    for line in five_face {
-        let pos = format!("\x1b[{};{}H", &p.x, &p.y);
-        p.x += 1;
-        print!("{}{line}", pos);
-        io::stdout().flush().expect("Welp this is bad");
-    }
-}
-
-// Moving Cursor
 
 const ANSI_CLEAR_SCREEN: &str = "\x1b[2J";
 const ANSI_HOME: &str = "\x1b[H";
