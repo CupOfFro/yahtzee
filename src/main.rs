@@ -3,7 +3,16 @@
 #![allow(unused)]
 
 use std::io;
-use std::io::Write; // Bring fush into scope
+use std::io::Write; // Bring flush into scope
+
+// We want to call a function defined outside of Rust,
+// in this case we want to call a system function
+type c_uchar = u8;
+type BYTE = c_uchar;
+type PBYTE = *mut BYTE;
+extern "system" {
+    fn GetKeyboardState(lpKeyState: PBYTE) -> bool;
+}
 
 // For sleep
 use std::thread::sleep;
@@ -23,14 +32,20 @@ fn main() {
     println!("{}", ANSI_CLEAR_SCREEN); // clear screen
     println!("{}", ANSI_HOME); // Go home
 
+    unsafe {
+        let mut b: u8 = 0;
+        let a: *mut u8 = &mut b;
+        GetKeyboardState(a);
+    }
+
     // println!("{}{}Hello, world!", ANSI_BLUE_BG, ANSI_GREEN_TEXT); // Red text
     // println!("\x1b[5;5HTesting"); // Go to position 5, 5 (1 based I believe)
     // println!("\x1b[31mHello, world!\x1b[39m\n"); // Red text
     // println!("\x1b[4AEka Eka Boo mean that{}", ANSI_RESET_TEXT);
 
-    fake_percentage();
-    println!("");
-    fake_loading_bar();
+    // fake_percentage();
+    // println!("");
+    // fake_loading_bar();
 
     set_bg_color(ANSI_BLUE_BG);
     draw_one_face(&mut Point { r: 10, c: 10 });
@@ -54,8 +69,6 @@ fn main() {
     pause();
 }
 
-
-
 fn pause() {
     print!("{}", ANSI_RESET_TEXT); // Reset any weird things we did
     println!("\nPausing. Press Enter to Continue");
@@ -75,7 +88,7 @@ fn draw_to_screen() {
     io::stdout().flush().expect("Welp this is bad");
 }
 
-fn set_bg_color(color: &str){
+fn set_bg_color(color: &str) {
     print!("{}", color);
 }
 
