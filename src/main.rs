@@ -5,18 +5,11 @@
 use std::io;
 use std::io::Write; // Bring flush into scope
 
-// We want to call a function defined outside of Rust,
-// in this case we want to call a system function
-type c_uchar = u8;
-type BYTE = c_uchar;
-type PBYTE = *mut BYTE;
-extern "system" {
-    fn GetKeyboardState(lpKeyState: PBYTE) -> bool;
-}
-
 // For sleep
 use std::thread::sleep;
 use std::time::Duration;
+
+use windows::Win32::UI::Input::KeyboardAndMouse::*;
 
 // usefule references for ANSI escape codes
 // https://stackoverflow.com/questions/33139248/i-cannot-print-color-escape-codes-to-the-terminal
@@ -33,9 +26,8 @@ fn main() {
     println!("{}", ANSI_HOME); // Go home
 
     unsafe {
-        let mut b: u8 = 0;
-        let a: *mut u8 = &mut b;
-        GetKeyboardState(a);
+        let keys: &mut [u8; 256] = &mut [0; 256];
+        GetKeyboardState(keys);
     }
 
     // println!("{}{}Hello, world!", ANSI_BLUE_BG, ANSI_GREEN_TEXT); // Red text
