@@ -25,10 +25,24 @@ fn main() {
     println!("{}", ANSI_CLEAR_SCREEN); // clear screen
     println!("{}", ANSI_HOME); // Go home
 
-    unsafe {
-        let keys: &mut [u8; 256] = &mut [0; 256];
-        GetKeyboardState(keys);
+    loop{
+        unsafe {
+            // let keys: &mut [u8; 256] = &mut [0; 256];
+            // GetKeyboardState(keys);
+            // \x1b[2K erases the whole line
+            print!("\x1b[1;1H\x1b[2K");
+            print!("{}", GetKeyState(VK_UP.0 as i32));
+            print!("\x1b[2;1H\x1b[2K");
+            print!("{}", GetKeyState(VK_DOWN.0 as i32));
+            print!("\x1b[3;1H\x1b[2K");
+            print!("{}", GetKeyState(VK_LEFT.0 as i32));
+            print!("\x1b[4;1H\x1b[2K");
+            print!("{}", GetKeyState(VK_RIGHT.0 as i32));
+            println!("");
+        }
     }
+
+    pause();
 
     // println!("{}{}Hello, world!", ANSI_BLUE_BG, ANSI_GREEN_TEXT); // Red text
     // println!("\x1b[5;5HTesting"); // Go to position 5, 5 (1 based I believe)
