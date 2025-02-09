@@ -18,7 +18,8 @@ fn main() {
     println!("{}", ansi_draw::ANSI_CLEAR_SCREEN); // clear screen
     println!("{}", ansi_draw::ANSI_HOME); // Go home
 
-    score_card::draw_score_card();
+    let player1 = score_card::ScoreCard::new("Joe");
+    player1.draw();
 
     // fake_percentage();
     // println!("");
@@ -36,13 +37,15 @@ fn main() {
     die_4.draw();
     die_5.draw();
 
+    ansi_draw::draw_to_screen();
+
     pause();
 }
 
 fn pause() {
     print!("{}", ansi_draw::ANSI_RESET_TEXT); // Reset any weird things we did
-    // println!("\nPausing. Press Enter to Continue");
-    ansi_draw::print_at((30,20), "Pausing. Press Enter to Continue\n");
+                                              // println!("\nPausing. Press Enter to Continue");
+    ansi_draw::print_at((30, 20), "Pausing. Press Enter to Continue\n");
     let mut pause = String::new();
     io::stdin()
         .read_line(&mut pause)
