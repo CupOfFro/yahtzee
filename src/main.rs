@@ -47,12 +47,17 @@ fn main() {
     // println!("");
     // fake_loading_bar();
 
-    dice::draw_die_face(dice::ONE_FACE, (10, 10));
-    dice::draw_die_face(dice::TWO_FACE, (10, 21));
-    dice::draw_die_face(dice::THREE_FACE, (10, 32));
-    dice::draw_die_face(dice::FOUR_FACE, (10, 43));
-    dice::draw_die_face(dice::FIVE_FACE, (10, 54));
-    dice::draw_die_face(dice::SIX_FACE, (10, 65));
+    let die_1 = dice::Die::new((10, 10), 1);
+    let die_2 = dice::Die::new((10, 21), 2);
+    let die_3 = dice::Die::new((10, 32), 3);
+    let die_4 = dice::Die::new((10, 43), 4);
+    let die_5 = dice::Die::new((10, 54), 5);
+
+    die_1.draw();
+    die_2.draw();
+    die_3.draw();
+    die_4.draw();
+    die_5.draw();
 
     ansi_draw::draw_horizontal_line((1, 1), "%", 100);
     ansi_draw::draw_vertical_line((1, 1), "%", 50);
