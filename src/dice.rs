@@ -1,4 +1,5 @@
 use crate::ansi_draw::*;
+use rand::Rng;
 
 const ONE_FACE: [&str; 5] = [
     " +-------+ ",
@@ -62,7 +63,11 @@ impl Die {
         Die {
             row: pos.0,
             col: pos.1,
-            val: val,
+            val: if val < 1 || val > 6 {
+                rand::thread_rng().gen_range(1..=6)
+            } else {
+                val
+            },
         }
     }
 
@@ -78,6 +83,10 @@ impl Die {
         };
 
         draw_die_face(face, (self.row, self.col));
+    }
+
+    pub fn roll(&mut self) {
+        self.val = rand::thread_rng().gen_range(1..=6);
     }
 }
 

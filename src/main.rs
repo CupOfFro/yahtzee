@@ -47,11 +47,11 @@ fn main() {
     // println!("");
     // fake_loading_bar();
 
-    let die_1 = dice::Die::new((10, 10), 1);
-    let die_2 = dice::Die::new((10, 21), 2);
-    let die_3 = dice::Die::new((10, 32), 3);
-    let die_4 = dice::Die::new((10, 43), 4);
-    let die_5 = dice::Die::new((10, 54), 5);
+    let die_1 = dice::Die::new((10, 10), 0);
+    let die_2 = dice::Die::new((10, 21), 0);
+    let die_3 = dice::Die::new((10, 32), 0);
+    let die_4 = dice::Die::new((10, 43), 0);
+    let die_5 = dice::Die::new((10, 54), 0);
 
     die_1.draw();
     die_2.draw();
