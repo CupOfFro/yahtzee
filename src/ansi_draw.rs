@@ -1,10 +1,42 @@
-pub struct Point {
-    pub r: usize, // row
-    pub c: usize, // column
-}
+use std::io;
+use std::io::Write;
+
+// usefule references for ANSI escape codes
+// https://stackoverflow.com/questions/33139248/i-cannot-print-color-escape-codes-to-the-terminal
+// https://stackoverflow.com/questions/69597466/move-cursor-escape-sequence
+// https://duffney.io/usingansiescapesequencespowershell/
+// https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
+// https://en.wikipedia.org/wiki/ANSI_escape_code
+
+// Info about format args for rust
+// https://doc.rust-lang.org/std/fmt/index.html
 
 pub fn set_bg_color(color: &str) {
     print!("{}", color);
+}
+
+// This will draw any print statements we have done with no new lines
+pub fn draw_to_screen() {
+    io::stdout().flush().expect("Welp this is bad");
+}
+
+pub fn draw_horizontal_line(point: (usize, usize), char: &str, length: usize) {
+    // I could use format to do this but think it looks better to use ANSI escapes like most of program
+    let (term_row, mut term_col) = point;
+    for i in 0..length {
+        let position = format!("\x1b[{};{}H", term_row, term_col);
+        term_col += 1;
+        print!("{}{}", position, char);
+    }
+}
+
+pub fn draw_vertical_line(point: (usize, usize), char: &str, length: usize) {
+    let (mut term_row, term_col) = point;
+    for i in 0..length {
+        let position = format!("\x1b[{};{}H", term_row, term_col);
+        term_row += 1;
+        print!("{}{}", position, char);
+    }
 }
 
 pub const ANSI_CLEAR_SCREEN: &str = "\x1b[2J";

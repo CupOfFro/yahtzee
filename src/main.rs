@@ -15,21 +15,9 @@ mod ansi_draw;
 mod dice;
 mod keys;
 
-use crate::ansi_draw::*;
-
-// usefule references for ANSI escape codes
-// https://stackoverflow.com/questions/33139248/i-cannot-print-color-escape-codes-to-the-terminal
-// https://stackoverflow.com/questions/69597466/move-cursor-escape-sequence
-// https://duffney.io/usingansiescapesequencespowershell/
-// https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
-// https://en.wikipedia.org/wiki/ANSI_escape_code
-
-// Info about format args for rust
-// https://doc.rust-lang.org/std/fmt/index.html
-
 fn main() {
-    println!("{}", ANSI_CLEAR_SCREEN); // clear screen
-    println!("{}", ANSI_HOME); // Go home
+    println!("{}", ansi_draw::ANSI_CLEAR_SCREEN); // clear screen
+    println!("{}", ansi_draw::ANSI_HOME); // Go home
 
     // loop {
     //     unsafe {
@@ -66,44 +54,21 @@ fn main() {
     dice::draw_die_face(dice::FIVE_FACE, (10, 54));
     dice::draw_die_face(dice::SIX_FACE, (10, 65));
 
-    draw_horizontal_line(&mut Point { r: 1, c: 1 }, "%", 100);
-    draw_vertical_line(&mut Point { r: 1, c: 1 }, "%", 50);
-    draw_horizontal_line(&mut Point { r: 2, c: 2 }, "#", 100);
-    draw_to_screen();
+    ansi_draw::draw_horizontal_line((1, 1), "%", 100);
+    ansi_draw::draw_vertical_line((1, 1), "%", 50);
+    ansi_draw::draw_horizontal_line((1, 1), "#", 100);
+    ansi_draw::draw_to_screen();
 
     pause();
 }
 
 fn pause() {
-    print!("{}", ANSI_RESET_TEXT); // Reset any weird things we did
+    print!("{}", ansi_draw::ANSI_RESET_TEXT); // Reset any weird things we did
     println!("\nPausing. Press Enter to Continue");
     let mut pause = String::new();
     io::stdin()
         .read_line(&mut pause)
         .expect("Failed to read line");
-}
-
-// This will draw any print statements we have done with no new lines
-fn draw_to_screen() {
-    io::stdout().flush().expect("Welp this is bad");
-}
-
-fn draw_horizontal_line(p: &mut Point, char: &str, length: usize) {
-    // I could use format to do this but think it looks better to use ANSI escapes like most of program
-    for i in 0..length {
-        let position = format!("\x1b[{};{}H", &p.r, &p.c);
-        p.c += 1;
-        print!("{}{}", position, char);
-    }
-}
-
-fn draw_vertical_line(p: &mut Point, char: &str, length: usize) {
-    // I could use format to do this but think it looks better to use ANSI escapes like most of program
-    for i in 0..length {
-        let position = format!("\x1b[{};{}H", &p.r, &p.c);
-        p.r += 1;
-        print!("{}{}", position, char);
-    }
 }
 
 // Moving Cursor
