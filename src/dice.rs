@@ -90,7 +90,7 @@ impl Die {
     }
 }
 
-pub fn draw_die_face(face: [&str; 5], point: (usize, usize)) {
+fn draw_die_face(face: [&str; 5], point: (usize, usize)) {
     let (mut term_row, term_col) = point;
     for line in face {
         // Set cursor position
