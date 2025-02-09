@@ -39,6 +39,13 @@ pub fn draw_vertical_line(point: (usize, usize), char: &str, length: usize) {
     }
 }
 
+pub fn print_at(point: (usize, usize), words: &str)
+{
+    let (term_row, term_col) = point;
+    let position = format!("\x1b[{};{}H", term_row, term_col);
+    print!("{}{}", position, words);
+}
+
 pub const ANSI_CLEAR_SCREEN: &str = "\x1b[2J";
 pub const ANSI_HOME: &str = "\x1b[H";
 pub const ANSI_RESET_TEXT: &str = "\x1b[0m";
