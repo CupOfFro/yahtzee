@@ -11,6 +11,12 @@ use std::io::Write;
 // Info about format args for rust
 // https://doc.rust-lang.org/std/fmt/index.html
 
+// Moving Cursor
+// Up: \x1b[{n}A
+// Down: \x1b[{n}B
+// Right: \x1b[{n}C
+// Left: \x1b[{n}D
+
 pub fn set_bg_color(color: &str) {
     print!("{}", color);
 }
@@ -39,8 +45,7 @@ pub fn draw_vertical_line(point: (usize, usize), char: &str, length: usize) {
     }
 }
 
-pub fn print_at(point: (usize, usize), words: &str)
-{
+pub fn print_at(point: (usize, usize), words: &str) {
     let (term_row, term_col) = point;
     let position = format!("\x1b[{};{}H", term_row, term_col);
     print!("{}{}", position, words);
