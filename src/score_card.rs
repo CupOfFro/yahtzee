@@ -163,7 +163,12 @@ impl ScoreCard {
         self.chance = (true, score);
     }
 
-    pub fn score_yahtzee_bonus(&mut self, dice: &[Die; 5]) {}
+    pub fn score_yahtzee_bonus(&mut self, dice: &[Die; 5]) {
+        if self.yahtzee.0 == true && self.yahtzee.1 != 0 {
+            self.yahtzee_bonus.0 = true;
+            self.yahtzee_bonus.1 += 100;
+        }
+    }
 }
 
 #[cfg(test)]
@@ -209,7 +214,7 @@ mod dice_tests {
             Die::new((1, 1), 6),
         ];
         score_card.score_yahtzee(&dice);
-        assert_eq!((true, 50), score_card.yahtzee)
+        assert_eq!((true, 50), score_card.yahtzee);
     }
 
     #[test]
@@ -223,7 +228,7 @@ mod dice_tests {
             Die::new((1, 1), 6),
         ];
         score_card.score_yahtzee(&dice);
-        assert_eq!((true, 0), score_card.yahtzee)
+        assert_eq!((true, 0), score_card.yahtzee);
     }
 
     #[test]
@@ -237,6 +242,25 @@ mod dice_tests {
             Die::new((1, 1), 3),
         ];
         score_card.score_chance(&dice);
-        assert_eq!((true, 20), score_card.chance)
+        assert_eq!((true, 20), score_card.chance);
+    }
+
+    #[test]
+    fn test_score_yahtzee_bonus() {
+        let mut score_card = ScoreCard::new("Test");
+        score_card.yahtzee = (true, 50);
+        let dice = [
+            Die::new((1, 1), 5),
+            Die::new((1, 1), 5),
+            Die::new((1, 1), 5),
+            Die::new((1, 1), 5),
+            Die::new((1, 1), 5),
+        ];
+        score_card.score_yahtzee_bonus(&dice);
+        assert_eq!((true, 100), score_card.yahtzee_bonus);
+        score_card.score_yahtzee_bonus(&dice);
+        assert_eq!((true, 200), score_card.yahtzee_bonus);
+        score_card.score_yahtzee_bonus(&dice);
+        assert_eq!((true, 300), score_card.yahtzee_bonus);
     }
 }
