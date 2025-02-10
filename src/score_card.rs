@@ -155,7 +155,14 @@ impl ScoreCard {
         }
     }
 
-    pub fn score_chance(&mut self, dice: &[Die; 5]) {}
+    pub fn score_chance(&mut self, dice: &[Die; 5]) {
+        let mut score = 0;
+        for die in dice {
+            score += die.val;
+        }
+        self.chance = (true, score);
+    }
+
     pub fn score_yahtzee_bonus(&mut self, dice: &[Die; 5]) {}
 }
 
@@ -217,5 +224,19 @@ mod dice_tests {
         ];
         score_card.score_yahtzee(&dice);
         assert_eq!((true, 0), score_card.yahtzee)
+    }
+
+    #[test]
+    fn test_score_chance() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 5),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 4),
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 3),
+        ];
+        score_card.score_chance(&dice);
+        assert_eq!((true, 20), score_card.chance)
     }
 }
