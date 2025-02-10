@@ -1,5 +1,5 @@
 // Don't warn about dead code
-#![warn(dead_code)]
+// #![warn(dead_code)]
 #![allow(unused)]
 
 use std::io;

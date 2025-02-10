@@ -143,7 +143,18 @@ impl ScoreCard {
     pub fn score_full_house(&mut self, dice: &[Die; 5]) {}
     pub fn score_sm_straight(&mut self, dice: &[Die; 5]) {}
     pub fn score_lg_straight(&mut self, dice: &[Die; 5]) {}
-    pub fn score_yahtzee(&mut self, dice: &[Die; 5]) {}
+
+    pub fn score_yahtzee(&mut self, dice: &[Die; 5]) {
+        self.yahtzee.0 = true;
+        if dice[0].val == dice[1].val
+            && dice[0].val == dice[2].val
+            && dice[0].val == dice[3].val
+            && dice[0].val == dice[4].val
+        {
+            self.yahtzee.1 = 50;
+        }
+    }
+
     pub fn score_chance(&mut self, dice: &[Die; 5]) {}
     pub fn score_yahtzee_bonus(&mut self, dice: &[Die; 5]) {}
 }
@@ -163,7 +174,7 @@ mod dice_tests {
             Die::new((1, 1), 1),
         ];
         score_card.score_top(1, &dice);
-        assert_eq!(5, score_card.ones.1);
+        assert_eq!((true, 5), score_card.ones);
     }
 
     #[test]
@@ -177,7 +188,34 @@ mod dice_tests {
             Die::new((1, 1), 5),
         ];
         score_card.score_top(6, &dice);
-        assert_eq!(18, score_card.sixes.1);
-        assert_eq!(true, score_card.sixes.0);
+        assert_eq!((true, 18), score_card.sixes);
+    }
+
+    #[test]
+    fn test_score_got_yahtzee() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 6),
+        ];
+        score_card.score_yahtzee(&dice);
+        assert_eq!((true, 50), score_card.yahtzee)
+    }
+
+    #[test]
+    fn test_score_not_yahtzee() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 3),
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 6),
+        ];
+        score_card.score_yahtzee(&dice);
+        assert_eq!((true, 0), score_card.yahtzee)
     }
 }
