@@ -50,39 +50,45 @@ impl ScoreCard {
         ansi_draw::draw_vertical_line((1, 1), "|", 24);
         ansi_draw::draw_vertical_line((1, 57), "|", 24);
 
-        let print_val = format!("Name: {}", self.name);
+        // Still working on the ASCII functions here
+        // so if you get a '12' then try to print a '2'
+        // the card will have '22'. This probably won't 
+        // happen in a regular game since scores shouldn't go down
+        // but to be safe (and for testing), I will print a few 
+        // spaces after the number, to erase anything
+        let print_val = format!("Name: {}   ", self.name);
         ansi_draw::print_at((2, 3), &print_val);
 
-        let print_val = format!("Ones: {}", self.ones);
+        let print_val = format!("Ones: {}   ", self.ones);
         ansi_draw::print_at((4, 3), &print_val);
-        let print_val = format!("Twos: {}", self.twos);
+        let print_val = format!("Twos: {}   ", self.twos);
         ansi_draw::print_at((5, 3), &print_val);
-        let print_val = format!("Threes: {}", self.threes);
+        let print_val = format!("Threes: {}   ", self.threes);
         ansi_draw::print_at((6, 3), &print_val);
-        let print_val = format!("Fours: {}", self.fours);
+        let print_val = format!("Fours: {}   ", self.fours);
         ansi_draw::print_at((7, 3), &print_val);
-        let print_val = format!("Fives: {}", self.fives);
+        let print_val = format!("Fives: {}   ", self.fives);
         ansi_draw::print_at((8, 3), &print_val);
-        let print_val = format!("Sixes: {}", self.sixes);
+        let print_val = format!("Sixes: {}   ", self.sixes);
         ansi_draw::print_at((9, 3), &print_val);
 
         ansi_draw::print_at((10, 3), "Total of Upper: ");
 
-        let print_val = format!("3 of a kind: {}", self.three_of_kind);
+        let print_val = format!("3 of a kind: {}   ", self.three_of_kind);
         ansi_draw::print_at((12, 3), &print_val);
-        let print_val = format!("4 of a kind: {}", self.four_of_kind);
+        let print_val = format!("4 of a kind: {}   ", self.four_of_kind);
         ansi_draw::print_at((13, 3), &print_val);
-        let print_val = format!("Full House: {}", self.full_house);
+        let print_val = format!("Full House: {}   ", self.full_house);
         ansi_draw::print_at((14, 3), &print_val);
-        let print_val = format!("Sm Straight: {}", self.sm_straight);
+        let print_val = format!("Sm Straight: {}   ", self.sm_straight);
         ansi_draw::print_at((15, 3), &print_val);
-        let print_val = format!("Lg Straight: {}", self.lg_straight);
+        let print_val = format!("Lg Straight: {}   ", self.lg_straight);
         ansi_draw::print_at((16, 3), &print_val);
-        let print_val = format!("Yahtzee: {}", self.yahtzee);
+        let print_val = format!("Yahtzee: {}   ", self.yahtzee);
         ansi_draw::print_at((17, 3), &print_val);
-        let print_val = format!("Chance: {}", self.chance);
+        let print_val = format!("Chance: {}   ", self.chance);
         ansi_draw::print_at((18, 3), &print_val);
-        let print_val = format!("Yahtzee Bonus: {}", self.yahtzee_bonus);
+        let print_val = format!("Yahtzee Bonus: {}   ", self.yahtzee_bonus);
         ansi_draw::print_at((19, 3), &print_val);
 
         ansi_draw::print_at((21, 3), "Total of Lower:");
