@@ -3,43 +3,44 @@ use crate::dice::*;
 
 pub struct ScoreCard {
     name: String,
-
-    ones: usize,
-    twos: usize,
-    threes: usize,
-    fours: usize,
-    fives: usize,
-    sixes: usize,
+    // bool is if the section has been playedor not
+    // usize is for score
+    ones: (bool, usize),
+    twos: (bool, usize),
+    threes: (bool, usize),
+    fours: (bool, usize),
+    fives: (bool, usize),
+    sixes: (bool, usize),
     // Lower section
-    three_of_kind: usize,
-    four_of_kind: usize,
-    full_house: usize,
-    sm_straight: usize,
-    lg_straight: usize,
-    yahtzee: usize,
-    chance: usize,
-    yahtzee_bonus: usize,
+    three_of_kind: (bool, usize),
+    four_of_kind: (bool, usize),
+    full_house: (bool, usize),
+    sm_straight: (bool, usize),
+    lg_straight: (bool, usize),
+    yahtzee: (bool, usize),
+    chance: (bool, usize),
+    yahtzee_bonus: (bool, usize),
 }
 
 impl ScoreCard {
     pub fn new(name: &str) -> ScoreCard {
         ScoreCard {
             name: String::from(name),
-            ones: 0,
-            twos: 0,
-            threes: 0,
-            fours: 0,
-            fives: 0,
-            sixes: 0,
+            ones: (false, 0),
+            twos: (false, 0),
+            threes: (false, 0),
+            fours: (false, 0),
+            fives: (false, 0),
+            sixes: (false, 0),
             // Lower section
-            three_of_kind: 0,
-            four_of_kind: 0,
-            full_house: 0,
-            sm_straight: 0,
-            lg_straight: 0,
-            yahtzee: 0,
-            chance: 0,
-            yahtzee_bonus: 0,
+            three_of_kind: (false, 0),
+            four_of_kind: (false, 0),
+            full_house: (false, 0),
+            sm_straight: (false, 0),
+            lg_straight: (false, 0),
+            yahtzee: (false, 0),
+            chance: (false, 0),
+            yahtzee_bonus: (false, 0),
         }
     }
 
@@ -58,37 +59,44 @@ impl ScoreCard {
         // spaces after the number, to erase anything
         let print_val = format!("Name: {}   ", self.name);
         ansi_draw::print_at((2, 3), &print_val);
-
-        let print_val = format!("Ones: {}   ", self.ones);
-        ansi_draw::print_at((4, 3), &print_val);
-        let print_val = format!("Twos: {}   ", self.twos);
+        if self.ones.0
+        {
+            let print_val = format!("Ones: {}   ", self.ones.1);
+            ansi_draw::print_at((4, 3), &print_val);
+        }
+        else{
+            let print_val = format!("Ones:     ");
+            ansi_draw::print_at((4, 3), &print_val);
+        }
+        
+        let print_val = format!("Twos: {}   ", self.twos.1);
         ansi_draw::print_at((5, 3), &print_val);
-        let print_val = format!("Threes: {}   ", self.threes);
+        let print_val = format!("Threes: {}   ", self.threes.1);
         ansi_draw::print_at((6, 3), &print_val);
-        let print_val = format!("Fours: {}   ", self.fours);
+        let print_val = format!("Fours: {}   ", self.fours.1);
         ansi_draw::print_at((7, 3), &print_val);
-        let print_val = format!("Fives: {}   ", self.fives);
+        let print_val = format!("Fives: {}   ", self.fives.1);
         ansi_draw::print_at((8, 3), &print_val);
-        let print_val = format!("Sixes: {}   ", self.sixes);
+        let print_val = format!("Sixes: {}   ", self.sixes.1);
         ansi_draw::print_at((9, 3), &print_val);
 
         ansi_draw::print_at((10, 3), "Total of Upper: ");
 
-        let print_val = format!("3 of a kind: {}   ", self.three_of_kind);
+        let print_val = format!("3 of a kind: {}   ", self.three_of_kind.1);
         ansi_draw::print_at((12, 3), &print_val);
-        let print_val = format!("4 of a kind: {}   ", self.four_of_kind);
+        let print_val = format!("4 of a kind: {}   ", self.four_of_kind.1);
         ansi_draw::print_at((13, 3), &print_val);
-        let print_val = format!("Full House: {}   ", self.full_house);
+        let print_val = format!("Full House: {}   ", self.full_house.1);
         ansi_draw::print_at((14, 3), &print_val);
-        let print_val = format!("Sm Straight: {}   ", self.sm_straight);
+        let print_val = format!("Sm Straight: {}   ", self.sm_straight.1);
         ansi_draw::print_at((15, 3), &print_val);
-        let print_val = format!("Lg Straight: {}   ", self.lg_straight);
+        let print_val = format!("Lg Straight: {}   ", self.lg_straight.1);
         ansi_draw::print_at((16, 3), &print_val);
-        let print_val = format!("Yahtzee: {}   ", self.yahtzee);
+        let print_val = format!("Yahtzee: {}   ", self.yahtzee.1);
         ansi_draw::print_at((17, 3), &print_val);
-        let print_val = format!("Chance: {}   ", self.chance);
+        let print_val = format!("Chance: {}   ", self.chance.1);
         ansi_draw::print_at((18, 3), &print_val);
-        let print_val = format!("Yahtzee Bonus: {}   ", self.yahtzee_bonus);
+        let print_val = format!("Yahtzee Bonus: {}   ", self.yahtzee_bonus.1);
         ansi_draw::print_at((19, 3), &print_val);
 
         ansi_draw::print_at((21, 3), "Total of Lower:");
@@ -106,15 +114,42 @@ impl ScoreCard {
             }
         }
         match category {
-            1 => self.ones = score,
-            2 => self.twos = score,
-            3 => self.threes = score,
-            4 => self.fours = score,
-            5 => self.fives = score,
-            6 => self.sixes = score,
+            1 => {
+                self.ones.0 = true;
+                self.ones.1 = score;
+            }
+            2 => {
+                self.twos.0 = true;
+                self.twos.1 = score;
+            }
+            3 => {
+                self.threes.0 = true;
+                self.threes.1 = score;
+            }
+            4 => {
+                self.fours.0 = true;
+                self.fours.1 = score;
+            }
+            5 => {
+                self.fives.0 = true;
+                self.fives.1 = score;
+            }
+            6 => {
+                self.sixes.0 = true;
+                self.sixes.1 = score;
+            }
             _ => (),
         }
     }
+
+    pub fn score_3_of_kind(&mut self, dice: &[Die; 5]){}
+    pub fn score_4_of_kind(&mut self, dice: &[Die; 5]){}
+    pub fn score_full_house(&mut self, dice: &[Die; 5]){}
+    pub fn score_sm_straight(&mut self, dice: &[Die; 5]){}
+    pub fn score_lg_straight(&mut self, dice: &[Die; 5]){}
+    pub fn score_yahtzee(&mut self, dice: &[Die; 5]){}
+    pub fn score_chance(&mut self, dice: &[Die; 5]){}
+    pub fn score_yahtzee_bonus(&mut self, dice: &[Die; 5]){}
 }
 
 #[cfg(test)]
@@ -132,7 +167,7 @@ mod dice_tests {
             Die::new((1,1),1),
         ];
         score_card.score_top(1, &dice);
-        assert_eq!(5, score_card.ones );
+        assert_eq!(5, score_card.ones.1 );
     }
 
     #[test]
@@ -146,6 +181,7 @@ mod dice_tests {
             Die::new((1,1),5),
         ];
         score_card.score_top(6, &dice);
-        assert_eq!(18, score_card.sixes );
+        assert_eq!(18, score_card.sixes.1 );
+        assert_eq!(true, score_card.sixes.0 );
     }
 }
