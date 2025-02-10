@@ -1,4 +1,5 @@
 use crate::ansi_draw;
+use crate::dice::*;
 
 pub struct ScoreCard {
     name: String,
@@ -89,5 +90,56 @@ impl ScoreCard {
         ansi_draw::print_at((23, 3), "Grand Total:");
 
         ansi_draw::draw_to_screen();
+    }
+
+    pub fn score_top(&mut self, category: usize, dice: &[Die; 5]) {
+        let mut score = 0;
+        for die in dice {
+            if die.val == category {
+                score += die.val
+            }
+        }
+        match category {
+            1 => self.ones = score,
+            2 => self.twos = score,
+            3 => self.threes = score,
+            4 => self.fours = score,
+            5 => self.fives = score,
+            6 => self.sixes = score,
+            _ => (),
+        }
+    }
+}
+
+#[cfg(test)]
+mod dice_tests {
+    use super::*;
+
+    #[test]
+    fn test_score_top_ones(){
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1,1),1),
+            Die::new((1,1),1),
+            Die::new((1,1),1),
+            Die::new((1,1),1),
+            Die::new((1,1),1),
+        ];
+        score_card.score_top(1, &dice);
+        assert_eq!(5, score_card.ones );
+    }
+
+    #[test]
+    fn test_score_top_sixes(){
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1,1),6),
+            Die::new((1,1),6),
+            Die::new((1,1),4),
+            Die::new((1,1),6),
+            Die::new((1,1),5),
+        ];
+        score_card.score_top(6, &dice);
+        assert_eq!(18, score_card.sixes );
     }
 }

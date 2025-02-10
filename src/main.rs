@@ -18,9 +18,9 @@ fn main() {
     println!("{}", ansi_draw::ANSI_CLEAR_SCREEN); // clear screen
     println!("{}", ansi_draw::ANSI_HOME); // Go home
 
-    let player1_score_card = score_card::ScoreCard::new("Joe");
+    let mut player1_score_card = score_card::ScoreCard::new("Joe");
 
-    let mut dice = vec![
+    let mut dice = [
         dice::Die::new((25, 2), 0),
         dice::Die::new((25, 13), 0),
         dice::Die::new((25, 24), 0),
@@ -35,6 +35,12 @@ fn main() {
             die.roll();
             die.draw();
         }
+        player1_score_card.score_top(1, &dice);
+        player1_score_card.score_top(2, &dice);
+        player1_score_card.score_top(3, &dice);
+        player1_score_card.score_top(4, &dice);
+        player1_score_card.score_top(5, &dice);
+        player1_score_card.score_top(6, &dice);
         ansi_draw::draw_to_screen();
 
         pause();

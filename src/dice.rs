@@ -54,7 +54,7 @@ const SIX_FACE: [&str; 5] = [
 pub struct Die {
     row: usize,
     col: usize,
-    val: usize,
+    pub val: usize,
     // selected: bool
 }
 
