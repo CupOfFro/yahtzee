@@ -21,11 +21,11 @@ fn main() {
     let mut player1_score_card = score_card::ScoreCard::new("Joe");
 
     let mut dice = [
-        dice::Die::new((25, 2), 0),
-        dice::Die::new((25, 13), 0),
-        dice::Die::new((25, 24), 0),
-        dice::Die::new((25, 35), 0),
-        dice::Die::new((25, 46), 0),
+        dice::Die::new((27, 2), 0),
+        dice::Die::new((27, 13), 0),
+        dice::Die::new((27, 24), 0),
+        dice::Die::new((27, 35), 0),
+        dice::Die::new((27, 46), 0),
     ];
 
     // Main game loop
@@ -43,14 +43,14 @@ fn main() {
         player1_score_card.score_top(6, &dice);
         ansi_draw::draw_to_screen();
 
-        pause();
+        pause((33, 12));
     }
 }
 
-fn pause() {
+fn pause(point: (usize, usize)) {
     print!("{}", ansi_draw::ANSI_RESET_TEXT); // Reset any weird things we did
                                               // println!("\nPausing. Press Enter to Continue");
-    ansi_draw::print_at((30, 20), "Pausing. Press Enter to Continue\n");
+    ansi_draw::print_at(point, "Pausing. Press Enter to Continue\n");
     let mut pause = String::new();
     io::stdin()
         .read_line(&mut pause)

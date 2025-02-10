@@ -47,63 +47,59 @@ impl ScoreCard {
     pub fn draw(&self) {
         // Draw Borders
         ansi_draw::draw_horizontal_line((1, 2), "-", 56);
-        ansi_draw::draw_horizontal_line((24, 2), "-", 56);
-        ansi_draw::draw_vertical_line((1, 1), "|", 24);
-        ansi_draw::draw_vertical_line((1, 57), "|", 24);
+        ansi_draw::draw_horizontal_line((26, 2), "-", 56);
+        ansi_draw::draw_vertical_line((1, 1), "|", 26);
+        ansi_draw::draw_vertical_line((1, 57), "|", 26);
 
         // Still working on the ASCII functions here
         // so if you get a '12' then try to print a '2'
-        // the card will have '22'. This probably won't 
+        // the card will have '22'. This probably won't
         // happen in a regular game since scores shouldn't go down
-        // but to be safe (and for testing), I will print a few 
+        // but to be safe (and for testing), I will print a few
         // spaces after the number, to erase anything
         let print_val = format!("Name: {}   ", self.name);
         ansi_draw::print_at((2, 3), &print_val);
-        if self.ones.0
-        {
-            let print_val = format!("Ones: {}   ", self.ones.1);
-            ansi_draw::print_at((4, 3), &print_val);
-        }
-        else{
-            let print_val = format!("Ones:     ");
-            ansi_draw::print_at((4, 3), &print_val);
-        }
-        
-        let print_val = format!("Twos: {}   ", self.twos.1);
-        ansi_draw::print_at((5, 3), &print_val);
-        let print_val = format!("Threes: {}   ", self.threes.1);
-        ansi_draw::print_at((6, 3), &print_val);
-        let print_val = format!("Fours: {}   ", self.fours.1);
-        ansi_draw::print_at((7, 3), &print_val);
-        let print_val = format!("Fives: {}   ", self.fives.1);
-        ansi_draw::print_at((8, 3), &print_val);
-        let print_val = format!("Sixes: {}   ", self.sixes.1);
-        ansi_draw::print_at((9, 3), &print_val);
+
+        let mut sec_point: (usize, usize) = (4, 3);
+        Self::format_score_at(&mut sec_point, self.ones, "Ones");
+        Self::format_score_at(&mut sec_point, self.twos, "Twos");
+        Self::format_score_at(&mut sec_point, self.threes, "Threes");
+        Self::format_score_at(&mut sec_point, self.fours, "Fours");
+        Self::format_score_at(&mut sec_point, self.fives, "Fives");
+        Self::format_score_at(&mut sec_point, self.sixes, "Sixes");
 
         ansi_draw::print_at((10, 3), "Total of Upper: ");
+        ansi_draw::print_at((11, 3), "Bonus (score >= 63): ");
+        ansi_draw::print_at((12, 3), "Total of Upper: ");
 
-        let print_val = format!("3 of a kind: {}   ", self.three_of_kind.1);
-        ansi_draw::print_at((12, 3), &print_val);
-        let print_val = format!("4 of a kind: {}   ", self.four_of_kind.1);
-        ansi_draw::print_at((13, 3), &print_val);
-        let print_val = format!("Full House: {}   ", self.full_house.1);
-        ansi_draw::print_at((14, 3), &print_val);
-        let print_val = format!("Sm Straight: {}   ", self.sm_straight.1);
-        ansi_draw::print_at((15, 3), &print_val);
-        let print_val = format!("Lg Straight: {}   ", self.lg_straight.1);
-        ansi_draw::print_at((16, 3), &print_val);
-        let print_val = format!("Yahtzee: {}   ", self.yahtzee.1);
-        ansi_draw::print_at((17, 3), &print_val);
-        let print_val = format!("Chance: {}   ", self.chance.1);
-        ansi_draw::print_at((18, 3), &print_val);
-        let print_val = format!("Yahtzee Bonus: {}   ", self.yahtzee_bonus.1);
-        ansi_draw::print_at((19, 3), &print_val);
+        let mut sec_point: (usize, usize) = (14, 3);
+        Self::format_score_at(&mut sec_point, self.three_of_kind, "3 of a kind");
+        Self::format_score_at(&mut sec_point, self.four_of_kind, "4 of a kind");
+        Self::format_score_at(&mut sec_point, self.full_house, "Full House");
+        Self::format_score_at(&mut sec_point, self.sm_straight, "Sm Straight");
+        Self::format_score_at(&mut sec_point, self.lg_straight, "Lg Straight");
+        Self::format_score_at(&mut sec_point, self.yahtzee, "Yahtzee");
+        Self::format_score_at(&mut sec_point, self.chance, "Chance");
+        Self::format_score_at(&mut sec_point, self.yahtzee_bonus, "Yahtzee Bonus");
 
         ansi_draw::print_at((21, 3), "Total of Lower:");
         ansi_draw::print_at((22, 3), "Total of Upper:");
         ansi_draw::print_at((23, 3), "Grand Total:");
 
         ansi_draw::draw_to_screen();
+    }
+
+    fn format_score_at(pos: &mut (usize, usize), val: (bool, usize), val_str: &str) {
+        // This formats a score if it is in use
+        // It also increments the r,c point by one
+        if val.0 {
+            let print_val = format!("{}: {}   ", val_str, val.1);
+            ansi_draw::print_at(*pos, &print_val);
+        } else {
+            let print_val = format!("{}:     ", val_str);
+            ansi_draw::print_at(*pos, &print_val);
+        }
+        pos.0 += 1;
     }
 
     pub fn score_top(&mut self, category: usize, dice: &[Die; 5]) {
@@ -142,14 +138,14 @@ impl ScoreCard {
         }
     }
 
-    pub fn score_3_of_kind(&mut self, dice: &[Die; 5]){}
-    pub fn score_4_of_kind(&mut self, dice: &[Die; 5]){}
-    pub fn score_full_house(&mut self, dice: &[Die; 5]){}
-    pub fn score_sm_straight(&mut self, dice: &[Die; 5]){}
-    pub fn score_lg_straight(&mut self, dice: &[Die; 5]){}
-    pub fn score_yahtzee(&mut self, dice: &[Die; 5]){}
-    pub fn score_chance(&mut self, dice: &[Die; 5]){}
-    pub fn score_yahtzee_bonus(&mut self, dice: &[Die; 5]){}
+    pub fn score_3_of_kind(&mut self, dice: &[Die; 5]) {}
+    pub fn score_4_of_kind(&mut self, dice: &[Die; 5]) {}
+    pub fn score_full_house(&mut self, dice: &[Die; 5]) {}
+    pub fn score_sm_straight(&mut self, dice: &[Die; 5]) {}
+    pub fn score_lg_straight(&mut self, dice: &[Die; 5]) {}
+    pub fn score_yahtzee(&mut self, dice: &[Die; 5]) {}
+    pub fn score_chance(&mut self, dice: &[Die; 5]) {}
+    pub fn score_yahtzee_bonus(&mut self, dice: &[Die; 5]) {}
 }
 
 #[cfg(test)]
@@ -157,31 +153,31 @@ mod dice_tests {
     use super::*;
 
     #[test]
-    fn test_score_top_ones(){
+    fn test_score_top_ones() {
         let mut score_card = ScoreCard::new("Test");
         let dice = [
-            Die::new((1,1),1),
-            Die::new((1,1),1),
-            Die::new((1,1),1),
-            Die::new((1,1),1),
-            Die::new((1,1),1),
+            Die::new((1, 1), 1),
+            Die::new((1, 1), 1),
+            Die::new((1, 1), 1),
+            Die::new((1, 1), 1),
+            Die::new((1, 1), 1),
         ];
         score_card.score_top(1, &dice);
-        assert_eq!(5, score_card.ones.1 );
+        assert_eq!(5, score_card.ones.1);
     }
 
     #[test]
-    fn test_score_top_sixes(){
+    fn test_score_top_sixes() {
         let mut score_card = ScoreCard::new("Test");
         let dice = [
-            Die::new((1,1),6),
-            Die::new((1,1),6),
-            Die::new((1,1),4),
-            Die::new((1,1),6),
-            Die::new((1,1),5),
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 4),
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 5),
         ];
         score_card.score_top(6, &dice);
-        assert_eq!(18, score_card.sixes.1 );
-        assert_eq!(true, score_card.sixes.0 );
+        assert_eq!(18, score_card.sixes.1);
+        assert_eq!(true, score_card.sixes.0);
     }
 }
