@@ -18,28 +18,27 @@ fn main() {
     println!("{}", ansi_draw::ANSI_CLEAR_SCREEN); // clear screen
     println!("{}", ansi_draw::ANSI_HOME); // Go home
 
-    let player1 = score_card::ScoreCard::new("Joe");
-    player1.draw();
+    let player1_score_card = score_card::ScoreCard::new("Joe");
 
-    // fake_percentage();
-    // println!("");
-    // fake_loading_bar();
+    let mut dice = vec![
+        dice::Die::new((25, 2), 0),
+        dice::Die::new((25, 13), 0),
+        dice::Die::new((25, 24), 0),
+        dice::Die::new((25, 35), 0),
+        dice::Die::new((25, 46), 0),
+    ];
 
-    let die_1 = dice::Die::new((25, 2), 0);
-    let die_2 = dice::Die::new((25, 13), 0);
-    let die_3 = dice::Die::new((25, 24), 0);
-    let die_4 = dice::Die::new((25, 35), 0);
-    let die_5 = dice::Die::new((25, 46), 0);
+    // Main game loop
+    loop {
+        player1_score_card.draw();
+        for die in &mut dice {
+            die.roll();
+            die.draw();
+        }
+        ansi_draw::draw_to_screen();
 
-    die_1.draw();
-    die_2.draw();
-    die_3.draw();
-    die_4.draw();
-    die_5.draw();
-
-    ansi_draw::draw_to_screen();
-
-    pause();
+        pause();
+    }
 }
 
 fn pause() {
