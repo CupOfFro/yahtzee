@@ -141,7 +141,31 @@ impl ScoreCard {
     pub fn score_3_of_kind(&mut self, dice: &[Die; 5]) {}
     pub fn score_4_of_kind(&mut self, dice: &[Die; 5]) {}
     pub fn score_full_house(&mut self, dice: &[Die; 5]) {}
-    pub fn score_sm_straight(&mut self, dice: &[Die; 5]) {}
+
+    pub fn score_sm_straight(&mut self, dice: &[Die; 5]) {
+        // We have a small straight with 1-4 or 2-5 or 3-6
+        self.sm_straight.0 = true;
+        let mut die_arr: [usize; 5] = [0; 5];
+        let mut i = 0;
+        for die in dice {
+            die_arr[i] = die.val;
+            i += 1;
+        }
+        die_arr.sort();
+        // We don't care what the fifth die is but we need the arrays to
+        // match for the small straight portion
+        let valid_sm_straight_one = [1, 2, 3, 4, die_arr[4]];
+        let valid_sm_straight_two = [2, 3, 4, 5, die_arr[4]];
+        let valid_sm_straight_three = [2, 3, 4, 5, die_arr[4]];
+        if die_arr == valid_sm_straight_one
+            || die_arr == valid_sm_straight_two
+            || die_arr == valid_sm_straight_three
+        {
+            self.sm_straight.1 = 30;
+        } else {
+            self.sm_straight.1 = 0;
+        }
+    }
 
     pub fn score_lg_straight(&mut self, dice: &[Die; 5]) {
         // We have a large straight with 1-5 or 2-6
@@ -153,9 +177,9 @@ impl ScoreCard {
             i += 1;
         }
         die_arr.sort();
-        let valid_lg_straight_one = [1,2,3,4,5];
-        let valid_lg_straight_two = [2,3,4,5,6];
-        if die_arr == valid_lg_straight_one || die_arr == valid_lg_straight_two{
+        let valid_lg_straight_one = [1, 2, 3, 4, 5];
+        let valid_lg_straight_two = [2, 3, 4, 5, 6];
+        if die_arr == valid_lg_straight_one || die_arr == valid_lg_straight_two {
             self.lg_straight.1 = 40;
         } else {
             self.lg_straight.1 = 0;
@@ -308,5 +332,33 @@ mod dice_tests {
         ];
         score_card.score_lg_straight(&dice);
         assert_eq!((true, 0), score_card.lg_straight);
+    }
+
+    #[test]
+    fn test_score_sm_straight_pass() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 4),
+            Die::new((1, 1), 3),
+            Die::new((1, 1), 1),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 6),
+        ];
+        score_card.score_sm_straight(&dice);
+        assert_eq!((true, 30), score_card.sm_straight);
+    }
+
+    #[test]
+    fn test_score_sm_straight_fail() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 3),
+            Die::new((1, 1), 1),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 6),
+        ];
+        score_card.score_sm_straight(&dice);
+        assert_eq!((true, 0), score_card.sm_straight);
     }
 }
