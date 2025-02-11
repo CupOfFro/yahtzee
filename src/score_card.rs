@@ -138,8 +138,48 @@ impl ScoreCard {
         }
     }
 
-    pub fn score_3_of_kind(&mut self, dice: &[Die; 5]) {}
-    pub fn score_4_of_kind(&mut self, dice: &[Die; 5]) {}
+    pub fn score_3_of_kind(&mut self, dice: &[Die; 5]) {
+        self.three_of_kind.0 = true;
+        // We are using 1-6 so we need 7 elements
+        let mut num_of_die = [0;7];
+        // Also add up score in case we are 3 of a kind
+        let mut score = 0;
+        for die in dice{
+            num_of_die[die.val] += 1;
+            score += die.val;
+        }
+        
+        for val in num_of_die{
+            if val >= 3 {
+                self.three_of_kind.1 = score;
+                return;
+            }
+        }
+
+        self.three_of_kind.1 = 0;
+    }
+
+    pub fn score_4_of_kind(&mut self, dice: &[Die; 5]) {
+        self.four_of_kind.0 = true;
+        // We are using 1-6 so we need 7 elements
+        let mut num_of_die = [0;7];
+        // Also add up score in case we are 3 of a kind
+        let mut score = 0;
+        for die in dice{
+            num_of_die[die.val] += 1;
+            score += die.val;
+        }
+        
+        for val in num_of_die{
+            if val >= 4 {
+                self.four_of_kind.1 = score;
+                return;
+            }
+        }
+
+        self.four_of_kind.1 = 0;
+    }
+
     pub fn score_full_house(&mut self, dice: &[Die; 5]) {}
 
     pub fn score_sm_straight(&mut self, dice: &[Die; 5]) {
@@ -360,5 +400,61 @@ mod dice_tests {
         ];
         score_card.score_sm_straight(&dice);
         assert_eq!((true, 0), score_card.sm_straight);
+    }
+
+    #[test]
+    fn test_score_3_of_kind() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 6),
+        ];
+        score_card.score_3_of_kind(&dice);
+        assert_eq!((true, 18), score_card.three_of_kind);
+    }
+
+    #[test]
+    fn test_score_3_of_kind_zero() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 3),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 6),
+        ];
+        score_card.score_3_of_kind(&dice);
+        assert_eq!((true, 0), score_card.three_of_kind);
+    }
+
+    #[test]
+    fn test_score_4_of_kind() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 5),
+            Die::new((1, 1), 5),
+            Die::new((1, 1), 5),
+            Die::new((1, 1), 5),
+        ];
+        score_card.score_4_of_kind(&dice);
+        assert_eq!((true, 26), score_card.four_of_kind);
+    }
+
+    #[test]
+    fn test_score_4_of_kind_zero() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 6),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 3),
+            Die::new((1, 1), 3),
+            Die::new((1, 1), 3),
+        ];
+        score_card.score_4_of_kind(&dice);
+        assert_eq!((true, 0), score_card.four_of_kind);
     }
 }
