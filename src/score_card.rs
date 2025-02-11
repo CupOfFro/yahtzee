@@ -142,7 +142,25 @@ impl ScoreCard {
     pub fn score_4_of_kind(&mut self, dice: &[Die; 5]) {}
     pub fn score_full_house(&mut self, dice: &[Die; 5]) {}
     pub fn score_sm_straight(&mut self, dice: &[Die; 5]) {}
-    pub fn score_lg_straight(&mut self, dice: &[Die; 5]) {}
+
+    pub fn score_lg_straight(&mut self, dice: &[Die; 5]) {
+        // We have a large straight with 1-5 or 2-6
+        self.lg_straight.0 = true;
+        let mut die_arr: [usize; 5] = [0; 5];
+        let mut i = 0;
+        for die in dice {
+            die_arr[i] = die.val;
+            i += 1;
+        }
+        die_arr.sort();
+        let valid_lg_straight_one = [1,2,3,4,5];
+        let valid_lg_straight_two = [2,3,4,5,6];
+        if die_arr == valid_lg_straight_one || die_arr == valid_lg_straight_two{
+            self.lg_straight.1 = 40;
+        } else {
+            self.lg_straight.1 = 0;
+        }
+    }
 
     pub fn score_yahtzee(&mut self, dice: &[Die; 5]) {
         self.yahtzee.0 = true;
@@ -262,5 +280,33 @@ mod dice_tests {
         assert_eq!((true, 200), score_card.yahtzee_bonus);
         score_card.score_yahtzee_bonus(&dice);
         assert_eq!((true, 300), score_card.yahtzee_bonus);
+    }
+
+    #[test]
+    fn test_score_lg_straight_pass() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 4),
+            Die::new((1, 1), 3),
+            Die::new((1, 1), 1),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 5),
+        ];
+        score_card.score_lg_straight(&dice);
+        assert_eq!((true, 40), score_card.lg_straight);
+    }
+
+    #[test]
+    fn test_score_lg_straight_fail() {
+        let mut score_card = ScoreCard::new("Test");
+        let dice = [
+            Die::new((1, 1), 4),
+            Die::new((1, 1), 3),
+            Die::new((1, 1), 1),
+            Die::new((1, 1), 2),
+            Die::new((1, 1), 6),
+        ];
+        score_card.score_lg_straight(&dice);
+        assert_eq!((true, 0), score_card.lg_straight);
     }
 }
