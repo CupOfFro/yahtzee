@@ -30,17 +30,27 @@ fn main() {
 
     // Main game loop
     loop {
-        player1_score_card.draw();
         for die in &mut dice {
             die.roll();
             die.draw();
         }
+        
         player1_score_card.score_top(1, &dice);
         player1_score_card.score_top(2, &dice);
         player1_score_card.score_top(3, &dice);
         player1_score_card.score_top(4, &dice);
         player1_score_card.score_top(5, &dice);
         player1_score_card.score_top(6, &dice);
+
+        player1_score_card.score_3_of_kind(&dice);
+        player1_score_card.score_4_of_kind(&dice);
+        player1_score_card.score_full_house(&dice);
+        player1_score_card.score_sm_straight(&dice);
+        player1_score_card.score_lg_straight(&dice);
+        player1_score_card.score_yahtzee(&dice);
+
+        player1_score_card.draw();
+
         ansi_draw::draw_to_screen();
 
         pause((33, 12));
