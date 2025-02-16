@@ -79,15 +79,15 @@ fn main() {
             if die_selected > 0 {
                 die_selected -= 1;
             }
-            if die_selected < 0 {
-                die_selected = 0;
-            }
         } else if keys.right.1 == true {
             keys.right.1 = false;
             die_selected += 1;
             if die_selected > dice.len() - 1 {
                 die_selected = dice.len() - 1;
             }
+        } else if keys.k.1 == true {
+            keys.k.1 = false;
+            dice[die_selected].toggle_rollable();
         }
 
         // pause((33, 33));

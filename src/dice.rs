@@ -83,11 +83,19 @@ impl Die {
             _ => ONE_FACE,
         };
 
-        if highlighted {
+        if highlighted && self.rollable {
             ansi_draw::set_bg_color(ansi_draw::ANSI_BLUE_BG);
+        } else if highlighted && !self.rollable {
+            ansi_draw::set_bg_color(ansi_draw::ANSI_YELLOW_BG);
+        } else if !self.rollable {
+            ansi_draw::set_bg_color(ansi_draw::ANSI_RED_BG);
         }
         draw_die_face(face, (self.row, self.col));
         ansi_draw::set_bg_color(ansi_draw::ANSI_RESET_TEXT);
+    }
+
+    pub fn toggle_rollable(&mut self) {
+        self.rollable = !self.rollable;
     }
 
     pub fn roll(&mut self) {

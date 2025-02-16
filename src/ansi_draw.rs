@@ -68,9 +68,9 @@ pub const ANSI_ERASE_LINE: &str = "\x1b[2K";
 
 // Backgrounds
 // pub const ANSI_BLACK_BG: &str = "\x1b[40m";
-// pub const ANSI_RED_BG: &str = "\x1b[41m";
+pub const ANSI_RED_BG: &str = "\x1b[41m";
 // pub const ANSI_GREEN_BG: &str = "\x1b[42m";
-// pub const ANSI_YELLOW_BG: &str = "\x1b[43m";
+pub const ANSI_YELLOW_BG: &str = "\x1b[43m";
 pub const ANSI_BLUE_BG: &str = "\x1b[44m";
 // pub const ANSI_MAGENTA_BG: &str = "\x1b[45m";
 // pub const ANSI_CYAN_BG: &str = "\x1b[46m";
