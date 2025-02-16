@@ -36,7 +36,7 @@ pub struct ScoreCard {
     chance: (bool, usize),
     yahtzee_bonus: (bool, usize),
 
-    selection: usize,
+    pub selection: usize,
 }
 
 impl ScoreCard {
@@ -59,7 +59,7 @@ impl ScoreCard {
             chance: (false, 0),
             yahtzee_bonus: (false, 0),
 
-            selection: 1
+            selection: 1,
         }
     }
 
@@ -82,7 +82,13 @@ impl ScoreCard {
         let mut sec_point: (usize, usize) = (4, 3);
         Self::format_score_at(&mut sec_point, self.ones, "Ones", self.selection, ONES);
         Self::format_score_at(&mut sec_point, self.twos, "Twos", self.selection, TWOS);
-        Self::format_score_at(&mut sec_point, self.threes, "Threes", self.selection, THREES);
+        Self::format_score_at(
+            &mut sec_point,
+            self.threes,
+            "Threes",
+            self.selection,
+            THREES,
+        );
         Self::format_score_at(&mut sec_point, self.fours, "Fours", self.selection, FOURS);
         Self::format_score_at(&mut sec_point, self.fives, "Fives", self.selection, FIVES);
         Self::format_score_at(&mut sec_point, self.sixes, "Sixes", self.selection, SIXES);
@@ -128,8 +134,20 @@ impl ScoreCard {
             self.selection,
             LARGE_STRAIGHT,
         );
-        Self::format_score_at(&mut sec_point, self.yahtzee, "Yahtzee", self.selection, YAHTZEE);
-        Self::format_score_at(&mut sec_point, self.chance, "Chance", self.selection, CHANCE);
+        Self::format_score_at(
+            &mut sec_point,
+            self.yahtzee,
+            "Yahtzee",
+            self.selection,
+            YAHTZEE,
+        );
+        Self::format_score_at(
+            &mut sec_point,
+            self.chance,
+            "Chance",
+            self.selection,
+            CHANCE,
+        );
         Self::format_score_at(
             &mut sec_point,
             self.yahtzee_bonus,
@@ -139,9 +157,9 @@ impl ScoreCard {
         );
 
         ansi_draw::set_bg_color(ansi_draw::ANSI_RESET_TEXT);
-        ansi_draw::print_at((21, 3), "Total of Lower:");
-        ansi_draw::print_at((22, 3), "Total of Upper:");
-        ansi_draw::print_at((23, 3), "Grand Total:");
+        ansi_draw::print_at((22, 3), "Total of Lower:");
+        ansi_draw::print_at((23, 3), "Total of Upper:");
+        ansi_draw::print_at((24, 3), "Grand Total:");
 
         ansi_draw::draw_to_screen();
     }

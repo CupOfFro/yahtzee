@@ -5,17 +5,17 @@ use windows::Win32::UI::Input::KeyboardAndMouse::*;
 // second is whether we saw the toggle state and want to set to true for we are toggled
 // Calling functions should set the second bool to false if they performed an operation using the bool
 #[derive(Debug)]
-pub struct Keys{
-    up: (bool, bool),
-    down: (bool, bool),
-    left: (bool, bool),
-    right: (bool, bool),
-    k: (bool, bool),
-    enter: (bool, bool),
+pub struct Keys {
+    pub up: (bool, bool),
+    pub down: (bool, bool),
+    pub left: (bool, bool),
+    pub right: (bool, bool),
+    pub k: (bool, bool),
+    pub enter: (bool, bool),
 }
 
-impl Keys{
-    pub fn new() -> Keys{
+impl Keys {
+    pub fn new() -> Keys {
         let up;
         let down;
         let left;
@@ -23,7 +23,7 @@ impl Keys{
         let k;
         let enter;
 
-        unsafe{
+        unsafe {
             up = (GetKeyState(VK_UP.0 as i32) & 1) != 0;
             down = (GetKeyState(VK_DOWN.0 as i32) & 1) != 0;
             left = (GetKeyState(VK_LEFT.0 as i32) & 1) != 0;
@@ -32,7 +32,7 @@ impl Keys{
             enter = (GetKeyState(VK_RETURN.0 as i32) & 1) != 0;
         }
 
-        Keys{
+        Keys {
             up: (up, false),
             down: (down, false),
             left: (left, false),
@@ -42,7 +42,7 @@ impl Keys{
         }
     }
 
-    pub fn check_keys_toggle(&mut self){
+    pub fn check_keys_toggle(&mut self) {
         let up;
         let down;
         let left;
@@ -50,7 +50,7 @@ impl Keys{
         let k;
         let enter;
 
-        unsafe{
+        unsafe {
             up = (GetKeyState(VK_UP.0 as i32) & 1) != 0;
             down = (GetKeyState(VK_DOWN.0 as i32) & 1) != 0;
             left = (GetKeyState(VK_LEFT.0 as i32) & 1) != 0;
@@ -65,10 +65,29 @@ impl Keys{
         set_val(&mut self.k, k);
         set_val(&mut self.enter, enter);
     }
+
+    // This will iterate thru all the keys and see if any were pressed
+    pub fn was_key_pressed(&self) -> bool {
+        if self.up.1 == true {
+            return true;
+        } else if self.down.1 == true {
+            return true;
+        } else if self.left.1 == true {
+            return true;
+        } else if self.right.1 == true {
+            return true;
+        } else if self.k.1 == true {
+            return true;
+        } else if self.enter.1 == true {
+            return true;
+        }
+
+        false
+    }
 }
 
-fn set_val(val: &mut (bool, bool), check: bool){
-    if val.0 != check{
+fn set_val(val: &mut (bool, bool), check: bool) {
+    if val.0 != check {
         val.0 = check;
         val.1 = true;
     }

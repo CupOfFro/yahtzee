@@ -37,23 +37,43 @@ fn main() {
             die.draw();
         }
 
-        player1_score_card.score_top(1, &dice);
-        player1_score_card.score_top(2, &dice);
-        player1_score_card.score_top(3, &dice);
-        player1_score_card.score_top(4, &dice);
-        player1_score_card.score_top(5, &dice);
-        player1_score_card.score_top(6, &dice);
+        // player1_score_card.score_top(1, &dice);
+        // player1_score_card.score_top(2, &dice);
+        // player1_score_card.score_top(3, &dice);
+        // player1_score_card.score_top(4, &dice);
+        // player1_score_card.score_top(5, &dice);
+        // player1_score_card.score_top(6, &dice);
 
-        player1_score_card.score_3_of_kind(&dice);
-        player1_score_card.score_4_of_kind(&dice);
-        player1_score_card.score_full_house(&dice);
-        player1_score_card.score_sm_straight(&dice);
-        player1_score_card.score_lg_straight(&dice);
-        player1_score_card.score_yahtzee(&dice);
+        // player1_score_card.score_3_of_kind(&dice);
+        // player1_score_card.score_4_of_kind(&dice);
+        // player1_score_card.score_full_house(&dice);
+        // player1_score_card.score_sm_straight(&dice);
+        // player1_score_card.score_lg_straight(&dice);
+        // player1_score_card.score_yahtzee(&dice);
 
         player1_score_card.draw();
 
-        pause((33, 33));
+        // Wait for a key to be pressed
+        while !keys.was_key_pressed() {
+            keys.check_keys_toggle();
+        }
+
+        // Now handle the key being pressed
+        if keys.up.1 == true {
+            keys.up.1 = false;
+            player1_score_card.selection -= 1;
+            if player1_score_card.selection < 1 {
+                player1_score_card.selection = 1;
+            }
+        } else if keys.down.1 == true {
+            keys.down.1 = false;
+            player1_score_card.selection += 1;
+            if player1_score_card.selection > 14 {
+                player1_score_card.selection = 14;
+            }
+        }
+
+        // pause((33, 33));
     }
 }
 
