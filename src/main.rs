@@ -34,7 +34,7 @@ fn main() {
             die.roll();
             die.draw();
         }
-        
+
         player1_score_card.score_top(1, &dice);
         player1_score_card.score_top(2, &dice);
         player1_score_card.score_top(3, &dice);
@@ -49,6 +49,7 @@ fn main() {
         player1_score_card.score_lg_straight(&dice);
         player1_score_card.score_yahtzee(&dice);
 
+        let selection = 1;
         player1_score_card.draw();
 
         ansi_draw::draw_to_screen();

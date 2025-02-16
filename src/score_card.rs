@@ -1,6 +1,21 @@
 use crate::ansi_draw;
 use crate::dice::*;
 
+const ONES: usize = 1;
+const TWOS: usize = 2;
+const THREES: usize = 3;
+const FOURS: usize = 4;
+const FIVES: usize = 5;
+const SIXES: usize = 6;
+const THREE_OF_KIND: usize = 7;
+const FOUR_OF_KIND: usize = 8;
+const FULL_HOUSE: usize = 9;
+const SMALL_STRAIGHT: usize = 10;
+const LARGE_STRAIGHT: usize = 11;
+const YAHTZEE: usize = 12;
+const CHANCE: usize = 13;
+const YAHTZEE_BONUS: usize = 14;
+
 pub struct ScoreCard {
     name: String,
     // bool is if the section has been playedor not
@@ -20,6 +35,8 @@ pub struct ScoreCard {
     yahtzee: (bool, usize),
     chance: (bool, usize),
     yahtzee_bonus: (bool, usize),
+
+    selection: usize,
 }
 
 impl ScoreCard {
@@ -41,6 +58,8 @@ impl ScoreCard {
             yahtzee: (false, 0),
             chance: (false, 0),
             yahtzee_bonus: (false, 0),
+
+            selection: 1
         }
     }
 
@@ -61,27 +80,65 @@ impl ScoreCard {
         ansi_draw::print_at((2, 3), &print_val);
 
         let mut sec_point: (usize, usize) = (4, 3);
-        Self::format_score_at(&mut sec_point, self.ones, "Ones");
-        Self::format_score_at(&mut sec_point, self.twos, "Twos");
-        Self::format_score_at(&mut sec_point, self.threes, "Threes");
-        Self::format_score_at(&mut sec_point, self.fours, "Fours");
-        Self::format_score_at(&mut sec_point, self.fives, "Fives");
-        Self::format_score_at(&mut sec_point, self.sixes, "Sixes");
+        Self::format_score_at(&mut sec_point, self.ones, "Ones", self.selection, ONES);
+        Self::format_score_at(&mut sec_point, self.twos, "Twos", self.selection, TWOS);
+        Self::format_score_at(&mut sec_point, self.threes, "Threes", self.selection, THREES);
+        Self::format_score_at(&mut sec_point, self.fours, "Fours", self.selection, FOURS);
+        Self::format_score_at(&mut sec_point, self.fives, "Fives", self.selection, FIVES);
+        Self::format_score_at(&mut sec_point, self.sixes, "Sixes", self.selection, SIXES);
 
+        ansi_draw::set_bg_color(ansi_draw::ANSI_RESET_TEXT);
         ansi_draw::print_at((10, 3), "Total of Upper: ");
         ansi_draw::print_at((11, 3), "Bonus (score >= 63): ");
         ansi_draw::print_at((12, 3), "Total of Upper: ");
 
         let mut sec_point: (usize, usize) = (14, 3);
-        Self::format_score_at(&mut sec_point, self.three_of_kind, "3 of a kind");
-        Self::format_score_at(&mut sec_point, self.four_of_kind, "4 of a kind");
-        Self::format_score_at(&mut sec_point, self.full_house, "Full House");
-        Self::format_score_at(&mut sec_point, self.sm_straight, "Sm Straight");
-        Self::format_score_at(&mut sec_point, self.lg_straight, "Lg Straight");
-        Self::format_score_at(&mut sec_point, self.yahtzee, "Yahtzee");
-        Self::format_score_at(&mut sec_point, self.chance, "Chance");
-        Self::format_score_at(&mut sec_point, self.yahtzee_bonus, "Yahtzee Bonus");
+        Self::format_score_at(
+            &mut sec_point,
+            self.three_of_kind,
+            "3 of a kind",
+            self.selection,
+            THREE_OF_KIND,
+        );
+        Self::format_score_at(
+            &mut sec_point,
+            self.four_of_kind,
+            "4 of a kind",
+            self.selection,
+            FOUR_OF_KIND,
+        );
+        Self::format_score_at(
+            &mut sec_point,
+            self.full_house,
+            "Full House",
+            self.selection,
+            FULL_HOUSE,
+        );
+        Self::format_score_at(
+            &mut sec_point,
+            self.sm_straight,
+            "Sm Straight",
+            self.selection,
+            SMALL_STRAIGHT,
+        );
+        Self::format_score_at(
+            &mut sec_point,
+            self.lg_straight,
+            "Lg Straight",
+            self.selection,
+            LARGE_STRAIGHT,
+        );
+        Self::format_score_at(&mut sec_point, self.yahtzee, "Yahtzee", self.selection, YAHTZEE);
+        Self::format_score_at(&mut sec_point, self.chance, "Chance", self.selection, CHANCE);
+        Self::format_score_at(
+            &mut sec_point,
+            self.yahtzee_bonus,
+            "Yahtzee Bonus",
+            self.selection,
+            YAHTZEE_BONUS,
+        );
 
+        ansi_draw::set_bg_color(ansi_draw::ANSI_RESET_TEXT);
         ansi_draw::print_at((21, 3), "Total of Lower:");
         ansi_draw::print_at((22, 3), "Total of Upper:");
         ansi_draw::print_at((23, 3), "Grand Total:");
@@ -89,11 +146,25 @@ impl ScoreCard {
         ansi_draw::draw_to_screen();
     }
 
-    fn format_score_at(pos: &mut (usize, usize), val: (bool, usize), val_str: &str) {
+    fn format_score_at(
+        pos: &mut (usize, usize),
+        val: (bool, usize),
+        val_str: &str,
+        selection: usize,
+        target: usize,
+    ) {
         // This formats a score if it is in use
         // It also increments the r,c point by one
+        if selection == target {
+            ansi_draw::set_bg_color(ansi_draw::ANSI_WHITE_BG);
+        } else if val.0 == true {
+            ansi_draw::set_bg_color(ansi_draw::ANSI_BLUE_BG);
+        } else {
+            ansi_draw::set_bg_color(ansi_draw::ANSI_RESET_TEXT);
+        }
+
         if val.0 {
-            let print_val = format!("{}: {}   ", val_str, val.1);
+            let print_val = format!("{}: {}{}   ", val_str, val.1, ansi_draw::ANSI_RESET_TEXT);
             ansi_draw::print_at(*pos, &print_val);
         } else {
             let print_val = format!("{}:     ", val_str);
