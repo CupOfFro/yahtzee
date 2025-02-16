@@ -22,6 +22,7 @@ fn main() {
 
     let mut player1_score_card = score_card::ScoreCard::new("Joe");
 
+    let mut die_selected = 0;
     let mut dice = [
         dice::Die::new((27, 2), 0),
         dice::Die::new((27, 13), 0),
@@ -34,8 +35,9 @@ fn main() {
     loop {
         for die in &mut dice {
             die.roll();
-            die.draw();
+            die.draw(false);
         }
+        dice[die_selected].draw(true);
 
         // player1_score_card.score_top(1, &dice);
         // player1_score_card.score_top(2, &dice);
@@ -70,6 +72,21 @@ fn main() {
             player1_score_card.selection += 1;
             if player1_score_card.selection > 14 {
                 player1_score_card.selection = 14;
+            }
+        } else if keys.left.1 == true {
+            keys.left.1 = false;
+            // avoid subtract with overflow error
+            if die_selected > 0 {
+                die_selected -= 1;
+            }
+            if die_selected < 0 {
+                die_selected = 0;
+            }
+        } else if keys.right.1 == true {
+            keys.right.1 = false;
+            die_selected += 1;
+            if die_selected > dice.len() - 1 {
+                die_selected = dice.len() - 1;
             }
         }
 

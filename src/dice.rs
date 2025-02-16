@@ -1,4 +1,4 @@
-use crate::ansi_draw::*;
+use crate::ansi_draw;
 use rand::Rng;
 
 const ONE_FACE: [&str; 5] = [
@@ -55,7 +55,7 @@ pub struct Die {
     row: usize,
     col: usize,
     pub val: usize,
-    // selected: bool
+    rollable: bool, // If true we will roll, else we won't
 }
 
 impl Die {
@@ -68,10 +68,11 @@ impl Die {
             } else {
                 val
             },
+            rollable: true,
         }
     }
 
-    pub fn draw(&self) {
+    pub fn draw(&self, highlighted: bool) {
         let face = match self.val {
             1 => ONE_FACE,
             2 => TWO_FACE,
@@ -82,11 +83,17 @@ impl Die {
             _ => ONE_FACE,
         };
 
+        if highlighted {
+            ansi_draw::set_bg_color(ansi_draw::ANSI_BLUE_BG);
+        }
         draw_die_face(face, (self.row, self.col));
+        ansi_draw::set_bg_color(ansi_draw::ANSI_RESET_TEXT);
     }
 
     pub fn roll(&mut self) {
-        self.val = rand::thread_rng().gen_range(1..=6);
+        if self.rollable {
+            self.val = rand::thread_rng().gen_range(1..=6);
+        }
     }
 }
 
