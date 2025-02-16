@@ -54,6 +54,7 @@ pub fn print_at(point: (usize, usize), words: &str) {
 pub const ANSI_CLEAR_SCREEN: &str = "\x1b[2J";
 pub const ANSI_HOME: &str = "\x1b[H";
 pub const ANSI_RESET_TEXT: &str = "\x1b[0m";
+pub const ANSI_ERASE_LINE: &str = "\x1b[2K";
 
 // Colors
 // pub const ANSI_BLACK_TEXT: &str = "\x1b[30m";
@@ -74,3 +75,34 @@ pub const ANSI_BLUE_BG: &str = "\x1b[44m";
 // pub const ANSI_MAGENTA_BG: &str = "\x1b[45m";
 // pub const ANSI_CYAN_BG: &str = "\x1b[46m";
 pub const ANSI_WHITE_BG: &str = "\x1b[47m";
+
+// fn fake_percentage() {
+//     for i in 1..=100 {
+//         print!("\x1b[5D{i}%");
+//         // We need to flush to get the terminal to actually draw without the newline
+//         // This is good to know cause now I think I can draw a whole screen and update
+//         // it with flush
+//         io::stdout().flush().expect("Welp this is bad");
+//         sleep(Duration::from_millis(100));
+//     }
+// }
+
+// fn fake_loading_bar() {
+//     for i in 1..=20 {
+//         // So this is a bit complicated at first but relatively simple
+//         // We start with "\x1b[100D[", this moves the cursor back either
+//         // 100 spaces, or to the left side of the screen, and will then
+//         // redraw from there.
+//         // So {} in print! will print an arg after the closing ".
+//         // : inside {} '{:}' gives us various format options
+//         // :# tells it to fill whitespace with a '#' char.
+//         // < says to left justify any fill space.
+//         // 1$ is saying that argument 1 (arguments are 0 based) is how much space to fill with.
+//         // so this matters because {} automatically assumes we are fillign with arg 0,
+//         // which in this case is "" an empty string.
+//         // Next we print argument 2 a "]" right justified
+//         print!("\x1b[100D[{:#<1$}{2:>3$}", "", i, "]", 21 - i);
+//         io::stdout().flush().expect("Welp this is bad");
+//         sleep(Duration::from_millis(100));
+//     }
+// }
