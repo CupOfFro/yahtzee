@@ -20,7 +20,16 @@ fn main() {
     println!("{}", ansi_draw::ANSI_CLEAR_SCREEN); // clear screen
     println!("{}", ansi_draw::ANSI_HOME); // Go home
 
-    let mut player1_score_card = score_card::ScoreCard::new("Joe");
+    print!("Enter your name: ");
+    let mut player_name = String::new();
+    io::stdin()
+        .read_line(&mut player_name)
+        .expect("Failed to read line");
+
+    println!("{}", ansi_draw::ANSI_CLEAR_SCREEN); // clear screen
+    println!("{}", ansi_draw::ANSI_HOME); // Go home
+
+    let mut player1_score_card = score_card::ScoreCard::new(&player_name);
 
     let mut die_selected = 0;
     let mut dice = [
