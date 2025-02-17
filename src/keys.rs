@@ -11,6 +11,7 @@ pub struct Keys {
     pub left: (bool, bool),
     pub right: (bool, bool),
     pub k: (bool, bool),
+    pub r: (bool, bool),
     pub enter: (bool, bool),
 }
 
@@ -21,6 +22,7 @@ impl Keys {
         let left;
         let right;
         let k;
+        let r;
         let enter;
 
         unsafe {
@@ -29,6 +31,7 @@ impl Keys {
             left = (GetKeyState(VK_LEFT.0 as i32) & 1) != 0;
             right = (GetKeyState(VK_RIGHT.0 as i32) & 1) != 0;
             k = (GetKeyState(VK_K.0 as i32) & 1) != 0;
+            r = (GetKeyState(VK_R.0 as i32) & 1) != 0;
             enter = (GetKeyState(VK_RETURN.0 as i32) & 1) != 0;
         }
 
@@ -38,6 +41,7 @@ impl Keys {
             left: (left, false),
             right: (right, false),
             k: (k, false),
+            r: (r, false),
             enter: (enter, false),
         }
     }
@@ -48,6 +52,7 @@ impl Keys {
         let left;
         let right;
         let k;
+        let r;
         let enter;
 
         unsafe {
@@ -56,6 +61,7 @@ impl Keys {
             left = (GetKeyState(VK_LEFT.0 as i32) & 1) != 0;
             right = (GetKeyState(VK_RIGHT.0 as i32) & 1) != 0;
             k = (GetKeyState(VK_K.0 as i32) & 1) != 0;
+            r = (GetKeyState(VK_R.0 as i32) & 1) != 0;
             enter = (GetKeyState(VK_RETURN.0 as i32) & 1) != 0;
         }
         set_val(&mut self.up, up);
@@ -63,6 +69,7 @@ impl Keys {
         set_val(&mut self.left, left);
         set_val(&mut self.right, right);
         set_val(&mut self.k, k);
+        set_val(&mut self.r, r);
         set_val(&mut self.enter, enter);
     }
 
@@ -77,6 +84,8 @@ impl Keys {
         } else if self.right.1 == true {
             return true;
         } else if self.k.1 == true {
+            return true;
+        } else if self.r.1 == true {
             return true;
         } else if self.enter.1 == true {
             return true;

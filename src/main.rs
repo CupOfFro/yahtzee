@@ -30,29 +30,18 @@ fn main() {
         dice::Die::new((27, 35), 0),
         dice::Die::new((27, 46), 0),
     ];
+    let mut number_of_rolls = 0;
 
     // Main game loop
     loop {
         for die in &mut dice {
-            die.roll();
             die.draw(false);
         }
         dice[die_selected].draw(true);
 
-        // player1_score_card.score_top(1, &dice);
-        // player1_score_card.score_top(2, &dice);
-        // player1_score_card.score_top(3, &dice);
-        // player1_score_card.score_top(4, &dice);
-        // player1_score_card.score_top(5, &dice);
-        // player1_score_card.score_top(6, &dice);
-
-        // player1_score_card.score_3_of_kind(&dice);
-        // player1_score_card.score_4_of_kind(&dice);
-        // player1_score_card.score_full_house(&dice);
-        // player1_score_card.score_sm_straight(&dice);
-        // player1_score_card.score_lg_straight(&dice);
-        // player1_score_card.score_yahtzee(&dice);
-
+        let rolls = format!("rolls: {}", number_of_rolls);
+        ansi_draw::print_at((2, 20), &rolls);
+        
         player1_score_card.draw();
 
         // Wait for a key to be pressed
@@ -88,18 +77,28 @@ fn main() {
         } else if keys.k.1 == true {
             keys.k.1 = false;
             dice[die_selected].toggle_rollable();
+        } else if keys.r.1 == true {
+            keys.r.1 = false;
+            if number_of_rolls < 3 {
+                number_of_rolls += 1;
+                for die in &mut dice {
+                    die.roll();
+                }
+            }
+        } else if keys.enter.1 == true {
+            keys.enter.1 = false;
+            number_of_rolls = 0;
         }
-
-        // pause((33, 33));
     }
 }
 
-fn pause(point: (usize, usize)) {
-    print!("{}", ansi_draw::ANSI_RESET_TEXT); // Reset any weird things we did
-                                              // println!("\nPausing. Press Enter to Continue");
-    ansi_draw::print_at(point, "Pausing. Press Enter to Continue\n");
-    let mut pause = String::new();
-    io::stdin()
-        .read_line(&mut pause)
-        .expect("Failed to read line");
-}
+// Old pause function for testing
+// fn pause(point: (usize, usize)) {
+//     print!("{}", ansi_draw::ANSI_RESET_TEXT); // Reset any weird things we did
+//                                               // println!("\nPausing. Press Enter to Continue");
+//     ansi_draw::print_at(point, "Pausing. Press Enter to Continue\n");
+//     let mut pause = String::new();
+//     io::stdin()
+//         .read_line(&mut pause)
+//         .expect("Failed to read line");
+// }
