@@ -30,7 +30,10 @@ fn main() {
         dice::Die::new((27, 35), 0),
         dice::Die::new((27, 46), 0),
     ];
-    let mut number_of_rolls = 0;
+    // starts at one for random inital roll, then will be reset to 0
+    // for subsequent rounds
+    let mut number_of_rolls = 1;
+    let mut number_of_rounds = 0;
 
     // Main game loop
     loop {
@@ -41,6 +44,9 @@ fn main() {
 
         let rolls = format!("rolls: {}", number_of_rolls);
         ansi_draw::print_at((2, 20), &rolls);
+
+        let rolls = format!("rounds: {}", number_of_rounds);
+        ansi_draw::print_at((3, 20), &rolls);
 
         player1_score_card.draw();
 
@@ -87,8 +93,16 @@ fn main() {
             }
         } else if keys.enter.1 == true {
             keys.enter.1 = false;
-            number_of_rolls = 0;
-            player1_score_card.score(&dice);
+            if player1_score_card.score(&dice) {
+                number_of_rolls = 0;
+                number_of_rounds += 1;
+                for die in &mut dice {
+                    if !die.get_rollable() {
+                        die.toggle_rollable();
+                    }
+                    die.roll();
+                }
+            }
         }
     }
 }

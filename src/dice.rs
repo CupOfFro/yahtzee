@@ -98,6 +98,10 @@ impl Die {
         self.rollable = !self.rollable;
     }
 
+    pub fn get_rollable(&mut self) -> bool {
+        self.rollable
+    }
+
     pub fn roll(&mut self) {
         if self.rollable {
             self.val = rand::thread_rng().gen_range(1..=6);

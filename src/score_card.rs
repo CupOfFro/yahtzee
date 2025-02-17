@@ -191,32 +191,41 @@ impl ScoreCard {
         pos.0 += 1;
     }
 
-    pub fn score(&mut self, dice: &[Die; 5]) {
+    // Return true if we set a value, false otherwise
+    pub fn score(&mut self, dice: &[Die; 5]) -> bool {
         if self.selection == 1 {
             if self.ones.0 == false {
                 self.score_top(1, dice);
+                return true;
             }
         } else if self.selection == 2 {
             if self.twos.0 == false {
                 self.score_top(2, dice);
+                return true;
             }
         } else if self.selection == 3 {
             if self.threes.0 == false {
                 self.score_top(3, dice);
+                return true;
             }
         } else if self.selection == 4 {
             if self.fours.0 == false {
                 self.score_top(4, dice);
+                return true;
             }
         } else if self.selection == 5 {
             if self.fives.0 == false {
                 self.score_top(5, dice);
+                return true;
             }
         } else if self.selection == 6 {
             if self.sixes.0 == false {
                 self.score_top(6, dice);
+                return true;
             }
         }
+
+        false
     }
 
     fn score_top(&mut self, category: usize, dice: &[Die; 5]) {
