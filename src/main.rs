@@ -41,7 +41,7 @@ fn main() {
 
         let rolls = format!("rolls: {}", number_of_rolls);
         ansi_draw::print_at((2, 20), &rolls);
-        
+
         player1_score_card.draw();
 
         // Wait for a key to be pressed
@@ -88,6 +88,7 @@ fn main() {
         } else if keys.enter.1 == true {
             keys.enter.1 = false;
             number_of_rolls = 0;
+            player1_score_card.score(&dice);
         }
     }
 }

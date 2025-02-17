@@ -18,7 +18,7 @@ const YAHTZEE_BONUS: usize = 14;
 
 pub struct ScoreCard {
     name: String,
-    // bool is if the section has been playedor not
+    // bool is if the section has been played or not
     // usize is for score
     ones: (bool, usize),
     twos: (bool, usize),
@@ -191,7 +191,35 @@ impl ScoreCard {
         pos.0 += 1;
     }
 
-    pub fn score_top(&mut self, category: usize, dice: &[Die; 5]) {
+    pub fn score(&mut self, dice: &[Die; 5]) {
+        if self.selection == 1 {
+            if self.ones.0 == false {
+                self.score_top(1, dice);
+            }
+        } else if self.selection == 2 {
+            if self.twos.0 == false {
+                self.score_top(2, dice);
+            }
+        } else if self.selection == 3 {
+            if self.threes.0 == false {
+                self.score_top(3, dice);
+            }
+        } else if self.selection == 4 {
+            if self.fours.0 == false {
+                self.score_top(4, dice);
+            }
+        } else if self.selection == 5 {
+            if self.fives.0 == false {
+                self.score_top(5, dice);
+            }
+        } else if self.selection == 6 {
+            if self.sixes.0 == false {
+                self.score_top(6, dice);
+            }
+        }
+    }
+
+    fn score_top(&mut self, category: usize, dice: &[Die; 5]) {
         let mut score = 0;
         for die in dice {
             if die.val == category {
@@ -227,7 +255,7 @@ impl ScoreCard {
         }
     }
 
-    pub fn score_3_of_kind(&mut self, dice: &[Die; 5]) {
+    fn score_3_of_kind(&mut self, dice: &[Die; 5]) {
         self.three_of_kind.0 = true;
         // We are using 1-6 so we need 7 elements
         let mut num_of_die = [0; 7];
@@ -248,7 +276,7 @@ impl ScoreCard {
         self.three_of_kind.1 = 0;
     }
 
-    pub fn score_4_of_kind(&mut self, dice: &[Die; 5]) {
+    fn score_4_of_kind(&mut self, dice: &[Die; 5]) {
         self.four_of_kind.0 = true;
         // We are using 1-6 so we need 7 elements
         let mut num_of_die = [0; 7];
@@ -269,7 +297,7 @@ impl ScoreCard {
         self.four_of_kind.1 = 0;
     }
 
-    pub fn score_full_house(&mut self, dice: &[Die; 5]) {
+    fn score_full_house(&mut self, dice: &[Die; 5]) {
         self.full_house.0 = true;
         // We are using 1-6 so we need 7 elements
         let mut num_of_die = [0; 7];
@@ -294,7 +322,7 @@ impl ScoreCard {
         }
     }
 
-    pub fn score_sm_straight(&mut self, dice: &[Die; 5]) {
+    fn score_sm_straight(&mut self, dice: &[Die; 5]) {
         // We have a small straight with 1-4 or 2-5 or 3-6
         self.sm_straight.0 = true;
         let mut die_arr: [usize; 5] = [0; 5];
@@ -319,7 +347,7 @@ impl ScoreCard {
         }
     }
 
-    pub fn score_lg_straight(&mut self, dice: &[Die; 5]) {
+    fn score_lg_straight(&mut self, dice: &[Die; 5]) {
         // We have a large straight with 1-5 or 2-6
         self.lg_straight.0 = true;
         let mut die_arr: [usize; 5] = [0; 5];
@@ -338,7 +366,7 @@ impl ScoreCard {
         }
     }
 
-    pub fn score_yahtzee(&mut self, dice: &[Die; 5]) {
+    fn score_yahtzee(&mut self, dice: &[Die; 5]) {
         self.yahtzee.0 = true;
         if dice[0].val == dice[1].val
             && dice[0].val == dice[2].val
@@ -349,7 +377,7 @@ impl ScoreCard {
         }
     }
 
-    pub fn score_chance(&mut self, dice: &[Die; 5]) {
+    fn score_chance(&mut self, dice: &[Die; 5]) {
         let mut score = 0;
         for die in dice {
             score += die.val;
@@ -357,7 +385,7 @@ impl ScoreCard {
         self.chance = (true, score);
     }
 
-    pub fn score_yahtzee_bonus(&mut self, dice: &[Die; 5]) {
+    fn score_yahtzee_bonus(&mut self, dice: &[Die; 5]) {
         if self.yahtzee.0 == true && self.yahtzee.1 != 0 {
             self.yahtzee_bonus.0 = true;
             self.yahtzee_bonus.1 += 100;
