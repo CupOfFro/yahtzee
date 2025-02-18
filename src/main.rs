@@ -30,6 +30,31 @@ fn main() {
     println!("{}", ansi_draw::ANSI_CLEAR_SCREEN); // clear screen
     println!("{}", ansi_draw::ANSI_HOME); // Go home
 
+    ansi_draw::print_at((1,1), ""); // Goto start
+    for i in 0..56 {
+        print!("-");
+    }
+    println!("");
+    ansi_draw::print_at((2,1), ""); // Goto start
+    for i in 0..31 {
+        println!("|");
+    }
+    print!("\x1b[A"); // Move cursor up
+    for i in 0..56 {
+        print!("-");
+    }
+
+    ansi_draw::print_at((2,2), "Please resize screen to the size of lines");
+    ansi_draw::print_at((3,2), "Press Enter when done");
+    ansi_draw::draw_to_screen();
+
+    io::stdin()
+        .read_line(&mut player_name)
+        .expect("Failed to read line");
+
+    println!("{}", ansi_draw::ANSI_CLEAR_SCREEN); // clear screen
+    println!("{}", ansi_draw::ANSI_HOME); // Go home
+
     let mut player1_score_card = score_card::ScoreCard::new(&player_name);
 
     let mut die_selected = 0;
