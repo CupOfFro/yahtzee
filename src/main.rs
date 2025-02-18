@@ -21,6 +21,7 @@ fn main() {
     println!("{}", ansi_draw::ANSI_HOME); // Go home
 
     print!("Enter your name: ");
+    ansi_draw::draw_to_screen();
     let mut player_name = String::new();
     io::stdin()
         .read_line(&mut player_name)

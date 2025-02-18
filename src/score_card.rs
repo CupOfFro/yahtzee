@@ -76,7 +76,7 @@ impl ScoreCard {
         // happen in a regular game since scores shouldn't go down
         // but to be safe (and for testing), I will print a few
         // spaces after the number, to erase anything
-        let print_val = format!("Name: {}   ", self.name);
+        let print_val = format!("Name: {}", self.name);
         ansi_draw::print_at((2, 3), &print_val);
 
         let mut sec_point: (usize, usize) = (4, 3);
