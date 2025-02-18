@@ -31,18 +31,14 @@ fn main() {
     println!("{}", ansi_draw::ANSI_HOME); // Go home
 
     ansi_draw::print_at((1,1), ""); // Goto start
-    for i in 0..56 {
-        print!("-");
-    }
+    print!("--------------------------------------------------------");
     println!("");
     ansi_draw::print_at((2,1), ""); // Goto start
     for i in 0..31 {
         println!("|");
     }
     print!("\x1b[A"); // Move cursor up
-    for i in 0..56 {
-        print!("-");
-    }
+    print!("--------------------------------------------------------");
 
     ansi_draw::print_at((2,2), "Please resize screen to the size of lines");
     ansi_draw::print_at((3,2), "Press Enter when done");
