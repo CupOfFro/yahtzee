@@ -223,6 +223,46 @@ impl ScoreCard {
                 self.score_top(6, dice);
                 return true;
             }
+        } else if self.selection == 7 {
+            if self.three_of_kind.0 == false {
+                self.score_3_of_kind(dice);
+                return true;
+            }
+        } else if self.selection == 8 {
+            if self.four_of_kind.0 == false {
+                self.score_4_of_kind(dice);
+                return true;
+            }
+        } else if self.selection == 9 {
+            if self.full_house.0 == false {
+                self.score_full_house(dice);
+                return true;
+            }
+        } else if self.selection == 10 {
+            if self.sm_straight.0 == false {
+                self.score_sm_straight(dice);
+                return true;
+            }
+        } else if self.selection == 11 {
+            if self.lg_straight.0 == false {
+                self.score_lg_straight(dice);
+                return true;
+            }
+        } else if self.selection == 12 {
+            if self.yahtzee.0 == false {
+                self.score_yahtzee(dice);
+                return true;
+            }
+        } else if self.selection == 13 {
+            if self.chance.0 == false {
+                self.score_chance(dice);
+                return true;
+            }
+        } else if self.selection == 14 {
+            if self.yahtzee_bonus.0 == false {
+                self.score_yahtzee_bonus(dice);
+                return true;
+            }
         }
 
         false

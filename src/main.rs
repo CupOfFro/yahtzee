@@ -30,18 +30,19 @@ fn main() {
     println!("{}", ansi_draw::ANSI_CLEAR_SCREEN); // clear screen
     println!("{}", ansi_draw::ANSI_HOME); // Go home
 
-    ansi_draw::print_at((1,1), ""); // Goto start
+    ansi_draw::print_at((1, 1), ""); // Goto start
     print!("--------------------------------------------------------");
     println!("");
-    ansi_draw::print_at((2,1), ""); // Goto start
+    ansi_draw::print_at((2, 1), ""); // Goto start
     for i in 0..31 {
         println!("|");
     }
     print!("\x1b[A"); // Move cursor up
     print!("--------------------------------------------------------");
 
-    ansi_draw::print_at((2,2), "Please resize screen to the size of lines");
-    ansi_draw::print_at((3,2), "Press Enter when done");
+    ansi_draw::print_at((2, 2), "Please resize screen to the size of lines");
+    ansi_draw::print_at((2, 2), "Or maximize screen");
+    ansi_draw::print_at((4, 2), "Press Enter when done");
     ansi_draw::draw_to_screen();
 
     io::stdin()
@@ -80,6 +81,10 @@ fn main() {
         ansi_draw::print_at((3, 20), &rolls);
 
         player1_score_card.draw();
+
+        if number_of_rounds >= 13 {
+            break;
+        }
 
         // Wait for a key to be pressed
         while !keys.was_key_pressed() {
@@ -125,7 +130,7 @@ fn main() {
         } else if keys.enter.1 == true {
             keys.enter.1 = false;
             if player1_score_card.score(&dice) {
-                number_of_rolls = 0;
+                number_of_rolls = 1;
                 number_of_rounds += 1;
                 for die in &mut dice {
                     if !die.get_rollable() {
@@ -136,15 +141,10 @@ fn main() {
             }
         }
     }
+    ansi_draw::set_bg_color(ansi_draw::ANSI_RED_BG);
+    ansi_draw::print_at((4,20), "GAME OVER");
+    ansi_draw::draw_to_screen();
+    while keys.enter.1 == false{
+        keys.check_keys_toggle();
+    }
 }
-
-// Old pause function for testing
-// fn pause(point: (usize, usize)) {
-//     print!("{}", ansi_draw::ANSI_RESET_TEXT); // Reset any weird things we did
-//                                               // println!("\nPausing. Press Enter to Continue");
-//     ansi_draw::print_at(point, "Pausing. Press Enter to Continue\n");
-//     let mut pause = String::new();
-//     io::stdin()
-//         .read_line(&mut pause)
-//         .expect("Failed to read line");
-// }
